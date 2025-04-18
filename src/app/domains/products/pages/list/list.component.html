@@ -1,12 +1,14 @@
 <div>
     <div>
-        <app-header/>
+        <app-header 
+        [cart] = "cart()"
+        (removeToCart)="removeToCart($event)"/>
     </div>
     <div class="grid grid-cols-4 gap-y-8 gap-x-0 container mx-auto mt-5">   
         @for(product of products(); track product;){
-            <app-products 
+            <app-products
             [product]="product"
-            (addToCart)="fromChild($event)" 
+            (addToCart)="addToCart($event)" 
             (ratingChange)="fromChildRating($event, product.id)"/>
         }
     </div>
