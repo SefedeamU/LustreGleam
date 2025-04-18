@@ -1,0 +1,13 @@
+<div>
+    <div>
+        <app-header/>
+    </div>
+    <div class="grid grid-cols-4 gap-y-8 gap-x-0 container mx-auto mt-5">   
+        @for(product of products(); track product;){
+            <app-products 
+            [product]="product"
+            (addToCart)="fromChild($event)" 
+            (ratingChange)="fromChildRating($event, product.id)"/>
+        }
+    </div>
+</div>
