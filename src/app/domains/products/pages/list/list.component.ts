@@ -3,23 +3,22 @@ import { CommonModule } from '@angular/common';
 
 import { ProductsComponent } from '@products/components/products/products.component';
 import { Product } from "@shared/models/product.model";
-import { HeaderComponent } from '@shared/components/header/header.component';
 import { ProductService } from '@shared/services/product.service';
 import { CartService } from '@shared/services/cart.service';
+
 @Component({
   selector: 'app-list',
-  imports: [CommonModule, ProductsComponent, HeaderComponent],
+  imports: [CommonModule, ProductsComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
 export class ListComponent {
 
   products = signal<Product[]> ([]);
-  cart = signal<Product[]> ([]);
+  cartService = inject(CartService);
 
   private productService = inject(ProductService);
-  private cartService = inject(CartService);
-  
+
   ngOnInit() {
     this.productService.getProducts()
     .subscribe({
@@ -30,17 +29,16 @@ export class ListComponent {
         console.error('Error al obtener los productos:', error);
       }
     });
-
   }
 
-  addToCart(product: Product){
+  addToCart(product: Product) {
     console.log('Estamos agregando un producto desde el hijo!');
-    this.cart.update((prevState) => [...prevState, product]);
+    this.cartService.cart.update((prevState) => [...prevState, product]); // Actualizamos el carrito en el servicio
   }
 
   removeToCart(product: Product) {
     console.log('Estamos eliminando un producto desde el hijo!');
-    this.cart.update((prevState) => prevState.filter(item => item.id !== product.id));
+    this.cartService.cart.update((prevState) => prevState.filter(item => item.id !== product.id)); // Eliminamos del carrito en el servicio
   }
 
   fromChildRating(newRating: number, productId: number) {
@@ -50,5 +48,4 @@ export class ListComponent {
       product.rating = newRating;
     }
   }
-
 }

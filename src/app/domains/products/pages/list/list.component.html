@@ -1,9 +1,4 @@
 <div class="bg-gray-300 min-h-screen">
-    <div>
-        <app-header 
-        [cart]="cart()"
-        (removeToCart)="removeToCart($event)"/>
-    </div>
     <div class="grid grid-cols-3 gap-y-8 gap-x-0 container mx-auto mt-5 px-50">
         @for(product of products(); track product;){
             <app-products
