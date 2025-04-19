@@ -1,4 +1,4 @@
-import { Component, Input, signal, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, Input, signal, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-counter',

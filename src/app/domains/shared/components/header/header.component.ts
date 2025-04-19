@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output, signal, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLinkWithHref } from '@angular/router';
 
-import { Product } from "./../../../shared/models/product.model";
+import { Product } from "@shared/models/product.model";
 @Component({
   selector: 'app-header',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLinkWithHref],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
