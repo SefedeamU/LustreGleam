@@ -95,10 +95,10 @@
 </nav>
 
 <!--Carrito de compras-->
-<div class="fixed border-l-4 top-0 right-0 bg-red z-40 w-100 h-screen p-4 overflow-y-auto transition-transform bg-white"
+<div class="bg-gray-300 fixed border-l-4 border-white dark:border-gray-900 top-0 right-0 z-40 w-100 h-screen p-4 overflow-y-auto transition-transform"
     [ngClass]="hideCart() ? 'translate-x-full' : 'translate-x-0'">
     <div class="flex justify-between items-center">
-        <p class="text-xl">My Cart</p>
+        <p class="text-xl"> <strong class="font-medium">My Cart</strong> </p>
     <button (click)="cartHandler()" class="cursor-pointer ms-auto p-2 rounded-full hover:bg-gray-300 focus:outline-none">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +119,7 @@
     
     <!-- Elementos del carrito de compras-->    
     @for(product of cart(); track product;){
-        <div class="mt-4 w-72 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div @dropToCart class="mt-4 w-72 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="px-4 pb-4">
                 <div class="flex items-center mt-2">
                     <!-- Imagen del producto -->

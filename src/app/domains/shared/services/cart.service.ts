@@ -27,4 +27,5 @@ export class CartService {
     this.cart.update((prevCart) => prevCart.filter((item) => item.id !== product.id));
     console.log(`Producto eliminado: ${product.title}`);
   }
+
 }

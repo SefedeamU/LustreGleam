@@ -1,15 +1,30 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLinkWithHref, RouterLinkActive} from '@angular/router';
+import { RouterLinkWithHref, RouterLinkActive } from '@angular/router';
 
 import { Product } from "@shared/models/product.model";
 import { CartService } from '@shared/services/cart.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-header',
   imports: [CommonModule, RouterLinkWithHref, RouterLinkActive],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
+  animations: [
+    trigger('dropToCart', [
+      transition(':enter', [
+        style({
+          transform: 'translateY(-50px)',
+          opacity: 0
+        }),
+        animate('0.2s ease-out', style({
+          transform: 'translateY(0)',
+          opacity: 1
+        }))
+      ])
+    ])
+  ]
 })
 export class HeaderComponent {
 
@@ -19,6 +34,7 @@ export class HeaderComponent {
   hideCart = this.cartService.hideCart; // Obtenemos el estado de visibilidad del carrito
   totalPrice = this.cartService.total; // Obtenemos el total calculado
 
+
   cartHandler() {
     this.cartService.toggleCartVisibility(); // Cambiamos la visibilidad del carrito
     console.log('Cambio en el carrito detectado!');
@@ -27,5 +43,10 @@ export class HeaderComponent {
   onRemove(product: Product) {
     console.log('Estamos eliminando un producto desde el hijo!');
     this.cartService.removeProduct(product); // Llamamos al método del servicio para eliminar el producto
+  }
+
+  addToCart(product: Product) {
+    console.log('Agregando producto con animación');
+    this.cartService.cart.update((prev) => [...prev, product]); // Actualizamos el carrito en el servicio
   }
 }
