@@ -1,4 +1,15 @@
-<div class="bg-gray-300 min-h-screen">
-    <app-header/>
-    <router-outlet/>
-</div>
+<div class="flex transition-all duration-200 ease-in-out bg-gray-300" [ngClass]="hideCart ? 'mr-0' : 'mr-[25rem]'">
+    <!-- Contenido Principal -->
+    <div class="flex-1 min-h-screen bg-gray-300">
+      <app-header />
+      <router-outlet />
+    </div>
+  </div>
+  
+  <!-- Carrito Sidebar -->
+  <div class="flex transition-[margin] duration-500 ease-in-out" [ngClass]="hideCart ? 'mr-0' : 'mr-[25rem]'">
+
+    <!-- Contenido del carrito -->
+    <!-- (puedes mantener el contenido que ya tenías) -->
+  </div>
+  

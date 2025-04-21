@@ -23,6 +23,18 @@ import { trigger, transition, style, animate } from '@angular/animations';
           opacity: 1
         }))
       ])
+    ]),
+    trigger('removeFromCart', [
+      transition(':leave', [
+        style({
+          transform: 'translateX(0)',
+          opacity: 1
+        }),
+        animate('0.2s ease-in', style({
+          transform: 'translateX(50px)', // Se mueve hacia la derecha
+          opacity: 0 // Se desvanece
+        }))
+      ])
     ])
   ]
 })
