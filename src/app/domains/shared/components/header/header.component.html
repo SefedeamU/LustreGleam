@@ -16,12 +16,27 @@
                     <strong [ngClass]="cart().length === 0 ? 'hidden' : ''" class="absolute -top-2 -left-2 rounded h-5 w-5 bg-white text-black text-xs group-hover:bg-gray-100 group-hover:text-gray-600">{{ cart().length }}</strong>
                 </button>
                 <!-- Botón de Usuario -->
-                <button type="button" class="cursor-pointer flex text-sm bg-white rounded-full p-2 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
-                    <span class="sr-only">Open user menu</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-800 hover:text-gray-600">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
-                </button>
+                    <!-- Botón de usuario o "Iniciar Sesión" -->
+                    @if(!isAuthenticated){
+                        <button
+                            type="button"
+                            class="cursor-pointer flex text-sm bg-blue-600 text-white rounded-full px-4 py-2 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
+                            (click)="openLoginModal()"
+                        >
+                        Iniciar Sesión
+                        </button>
+                    } @else{
+                        <button type="button" class="cursor-pointer flex text-sm bg-white rounded-full p-2 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+                            <span class="sr-only">Open user menu</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-800 hover:text-gray-600">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                </svg>
+                        </button>
+                    }
+                    @if(showLoginModal()){
+                        <!-- Modal de inicio de sesión -->
+                        <app-login></app-login>
+                      }
                 <!-- Dropdown menu -->
                 <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
                     <div class="px-4 py-3">
@@ -118,45 +133,46 @@
     </div>
     
     <!-- Elementos del carrito de compras-->    
-    @for(product of cart(); track product;){
+    @for(product of cart(); track product.id){
         <div @dropToCart @removeFromCart class="mt-4 w-72 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="px-4 pb-4">
                 <div class="flex items-center mt-2">
-                    <!-- Imagen del producto -->
-                    <div>
-                        <img class="w-16 h-16 p-2 rounded-t-lg" [src]="product.images[0]" alt="product image" />
-                    </div>
-                    <div class="flex flex-col space-y-2 rtl:space-y-reverse">
-                        <!-- Nombre del producto -->
-                        <div>
-                            <h5 class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">{{ product.title }}</h5>
-                        </div>
-                        <!-- Precio del producto -->
-                        <div>
-                            <h5 class="text-md font-medium tracking-tight text-gray-700 dark:text-gray-300">{{ product.price }}$</h5>
-                        </div>
-                    </div>
-                    <!-- Botón de eliminar -->
-                    <button (click)="onRemove(product)" class="cursor-pointer ms-auto p-2 rounded-full bg-gray-800  hover:bg-gray-700 focus:outline-none">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="white"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                <img class="w-16 h-16 p-2 rounded-t-lg" [src]="product.images[0]" alt="product image" />
+        
+                <div class="flex flex-col space-y-2 ml-4">
+                    <h5 class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
+                    {{ product.title }}
+                    </h5>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                    Precio unitario: {{ product.price }}$
+                    </p>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                    Total: {{ product.price * product.quantity }}$
+                    </p>
+        
+                    <!-- Botones de cantidad -->
+                    <div class="flex items-center space-x-2">
+                    <button (click)="decrease(product.id)" class="px-2 py-1 bg-gray-300 hover:bg-gray-400 rounded text-black">
+                        -
                     </button>
+                    <span class="text-sm font-medium">{{ product.quantity }}</span>
+                    <button (click)="increase(product.id)" class="px-2 py-1 bg-gray-300 hover:bg-gray-400 rounded text-black">
+                        +
+                    </button>
+                    </div>
+                </div>
+        
+                <!-- Botón de eliminar -->
+                <button (click)="removeFromCart(product)" class="cursor-pointer ms-auto p-2 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
                 </div>
             </div>
         </div>
-    }
+      }
+      
     <hr class="border-t-2 border-gray-700 mt-6" />
     <div [ngClass]="cart().length === 0 ? 'hidden' : ''">
         <span class="text-xl text-gray-900 dark:text-black">Total: {{ totalPrice() }}$</span>

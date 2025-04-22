@@ -33,7 +33,7 @@ export class ListComponent {
 
   addToCart(product: Product) {
     console.log('Estamos agregando un producto desde el hijo!');
-    this.cartService.cart.update((prevState) => [...prevState, product]); // Actualizamos el carrito en el servicio
+    this.cartService.addProduct(product);
   }
 
   removeToCart(product: Product) {

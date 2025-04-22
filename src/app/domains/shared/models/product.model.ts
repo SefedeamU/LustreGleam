@@ -6,5 +6,4 @@ export interface Product {
   description: string;
   rating: number;
   creationAt:string;
-  animate?: boolean;
 }
