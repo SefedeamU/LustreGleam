@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
-
+import { RouterLinkWithHref } from '@angular/router';
 
 import { Product } from "@shared/models/product.model";
 import { TimeAgoPipe } from "@shared/pipes/time-ago.pipe";
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, TimeAgoPipe],
+  imports: [CommonModule, TimeAgoPipe, RouterLinkWithHref],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css',
   animations: [

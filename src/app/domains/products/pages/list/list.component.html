@@ -1,12 +1,22 @@
-<div class="bg-gray-300 min-h-screen">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 container mx-auto mt-5 px-4 min-w-0">
-      @for(product of products(); track product;){
+<div class="bg-gray-100 min-h-screen py-8 px-4">
+  <div class="container mx-auto">
+    <div
+      class="grid gap-6
+            grid-cols-1
+            sm:grid-cols-2
+            md:grid-cols-3
+            lg:grid-cols-4
+            xl:grid-cols-5
+            justify-items-center">
+
+      @for(product of products(); track product) {
         <app-products
           [product]="product"
-          (addToCart)="addToCart($event)" 
+          (addToCart)="addToCart($event)"
           (ratingChange)="fromChildRating($event, product.id)">
         </app-products>
       }
+
     </div>
   </div>
-  
+</div>
