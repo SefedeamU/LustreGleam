@@ -1,89 +1,91 @@
 <div (click)="closeLogin()" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
-    <div (click)="$event.stopPropagation()" class="dark:bg-gray-800 rounded-lg shadow-lg p-4 w-full max-w-sm relative z-90">
+  <div (click)="$event.stopPropagation()" class="dark:bg-gray-800 rounded-lg shadow-lg p-4 w-full max-w-sm relative z-90">
 
-        <div class="relative dark:bg-gray-600 rounded-lg shadow-md p-4 max-w-sm mx-auto">
-            <!-- Botón para cerrar -->
-            <button
-                type="button"
-                class="absolute top-2 right-2 text-gray-200 hover:text-gray-700 focus:outline-none cursor-pointer"
-                (click)="closeLogin()"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
+    <div class="relative dark:bg-gray-600 rounded-lg shadow-md p-4 max-w-sm mx-auto">
+      <!-- Botón para cerrar -->
+      <button
+        type="button"
+        class="absolute top-2 right-2 text-gray-200 hover:text-gray-700 focus:outline-none cursor-pointer"
+        (click)="closeLogin()"
+        >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+          >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Formulario de inicio de sesión -->
+      <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="mb-5">
+          <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="user.email"
+            #emailInput="ngModel"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="name@flowbite.com"
+            required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            />
+            <!-- Mensaje de error personalizado -->
+            @if(emailInput.invalid && emailInput.touched){
+              <div class="text-red-500 text-sm mt-1">
+                @if(emailInput.errors?.['required']){
+                  El correo electrónico es obligatorio.
+                }
+                @if(emailInput.errors?.['pattern']){
+                  Por favor, introduce un correo electrónico válido.
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-5">
+            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              [(ngModel)]="user.password"
+              #passwordInput="ngModel"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required
+              />
+              <!-- Mensaje de error personalizado -->
+              @if (passwordInput.invalid && passwordInput.touched) {
+                <div class="text-red-500 text-sm mt-1">
+                  La contraseña es obligatoria.
+                </div>
+              }
+            </div>
+
+            <!-- Contenedor para el botón y el enlace -->
+            <div class="flex items-center justify-between">
+              <button
+                type="submit"
+                [disabled]="loginForm.invalid"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            
-            <!-- Formulario de inicio de sesión -->
-            <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
-                <div class="mb-5">
-                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    [(ngModel)]="user.email"
-                    #emailInput="ngModel"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@flowbite.com"
-                    required
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                />
-                <!-- Mensaje de error personalizado -->
-                    @if(emailInput.invalid && emailInput.touched){
-                        <div class="text-red-500 text-sm mt-1">
-                            @if(emailInput.errors?.['required']){
-                                El correo electrónico es obligatorio.
-                            }
-                            @if(emailInput.errors?.['pattern']){
-                                Por favor, introduce un correo electrónico válido.
-                            }
-                        </div>
-                    }
-                </div>
-
-                <div class="mb-5">
-                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        [(ngModel)]="user.password"
-                        #passwordInput="ngModel"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        required
-                    />
-                    <!-- Mensaje de error personalizado -->
-                    <div *ngIf="passwordInput.invalid && passwordInput.touched" class="text-red-500 text-sm mt-1">
-                        La contraseña es obligatoria.
-                    </div>
-                </div>
-
-                <!-- Contenedor para el botón y el enlace -->
-                <div class="flex items-center justify-between">
-                    <button
-                    type="submit"
-                    [disabled]="loginForm.invalid"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                        Submit
-                    </button>
-                    <a
-                    routerLink="/register"
-                    class="text-sm text-blue-200 hover:underline dark:text-blue-500"
-                    (click)="closeLogin()"
-                    (click)="hideCart()"
-                    >
-                        <strong>¿No tienes cuenta? Registrarse</strong>
-                    </a>
-                </div>
-            </form>
+                Submit
+              </button>
+              <a
+                routerLink="/register"
+                class="text-sm text-blue-200 hover:underline dark:text-blue-500"
+                (click)="closeLogin()"
+                (click)="hideCart()"
+                >
+                <strong>¿No tienes cuenta? Registrarse</strong>
+              </a>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-</div>

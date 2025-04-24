@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { RouterLinkWithHref } from '@angular/router';
 
 import { LoginService } from '@shared/services/login.service';
@@ -9,7 +9,7 @@ import { CartService } from '@shared/services/cart.service';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule, RouterLinkWithHref],
+  imports: [FormsModule, RouterLinkWithHref],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

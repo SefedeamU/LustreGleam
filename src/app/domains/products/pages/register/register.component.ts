@@ -2,11 +2,11 @@ import { Component, inject } from '@angular/core';
 import { RegisterService } from '@shared/services/register.service';
 import { UserRegister } from '@shared/models/userRegister.model';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { RouterLinkWithHref } from '@angular/router';
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, CommonModule, RouterLinkWithHref],
+  imports: [FormsModule, RouterLinkWithHref],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
