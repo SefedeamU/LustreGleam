@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 
 import { UserLogin } from '@shared/models/userLogin.model';
 
@@ -7,7 +8,7 @@ import { UserLogin } from '@shared/models/userLogin.model';
 })
 export class LoginService {
   showLoginModal = signal(false);
-  constructor() {}
+  private http = inject(HttpClient);
 
   login(user: UserLogin): void {
     console.log('Intentando iniciar sesión con:', user);

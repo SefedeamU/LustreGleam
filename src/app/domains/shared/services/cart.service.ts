@@ -26,6 +26,19 @@ export class CartService {
     this.hideCart.set(true);
   }
 
+  addProductWithOverlay(product: Product, showOverlayCallback: (state: boolean) => void) {
+  // Agregar el producto al carrito
+  this.addProduct(product);
+
+  // Mostrar el overlay
+  showOverlayCallback(true);
+
+  // Ocultar el overlay después de 1.5 segundos
+  setTimeout(() => {
+    showOverlayCallback(false);
+  }, 1500);
+}
+
   addProduct(product: Product) {
     this.cart.update((prevCart) => {
       const existingProduct = prevCart.find(item => item.id === product.id);

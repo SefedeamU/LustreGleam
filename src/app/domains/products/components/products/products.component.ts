@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 import { RouterLinkWithHref } from '@angular/router';
 
 import { Product } from "@shared/models/product.model";
 import { TimeAgoPipe } from "@shared/pipes/time-ago.pipe";
+import { RatingService } from '@shared/services/rating.service';
+import { CartService } from '@shared/services/cart.service';
 @Component({
   selector: 'app-products',
   imports: [CommonModule, TimeAgoPipe, RouterLinkWithHref],
@@ -28,27 +30,25 @@ import { TimeAgoPipe } from "@shared/pipes/time-ago.pipe";
   ]
   
 })
+
 export class ProductsComponent {
 
-  @Input({required: true}) product!: Product;
-
-  @Output() addToCart = new EventEmitter();
-  @Output() ratingChange = new EventEmitter<number>();
+  @Input({ required: true }) product!: Product;
 
   showOverlay = false;
 
-  addToCartHandler() {
-    this.addToCart.emit(this.product);
+  private cartService = inject(CartService)
+  private ratingService = inject(RatingService);
 
+  addToCartHandler() {
+    this.cartService.addProduct(this.product); // Llama al servicio para agregar el producto
     this.showOverlay = true;
     setTimeout(() => {
       this.showOverlay = false;
-    }, 1500); // Cambia el tiempo según tus necesidades
+    }, 1500);
   }
 
   setRating(newRating: number) {
     this.product.rating = newRating;
-    this.ratingChange.emit(this.product.rating);
   }
-
 }

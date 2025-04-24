@@ -151,14 +151,27 @@
                     </p>
         
                     <!-- Botones de cantidad -->
-                    <div class="flex items-center space-x-2">
-                    <button (click)="decrease(product.id)" class="px-2 py-1 bg-gray-300 hover:bg-gray-400 rounded text-black">
-                        -
-                    </button>
-                    <span class="text-sm font-medium">{{ product.quantity }}</span>
-                    <button (click)="increase(product.id)" class="px-2 py-1 bg-gray-300 hover:bg-gray-400 rounded text-black">
-                        +
-                    </button>
+                    <div class="flex items-center space-x-2" style="padding-top: 0.7rem; padding-bottom: 0.7rem;">
+                        <!-- Botón "-" -->
+                        <button
+                            (click)="decrease(product.id)"
+                            class="cursor-pointer px-2 py-0.5 bg-gray-300 hover:bg-gray-400 rounded text-black text-base leading-none flex items-center justify-center relative"
+                            style="top: -2px;" aria-label="Disminuir cantidad"> <!-- Ajusta el valor de -2px según sea necesario -->
+                            <strong>-</strong>
+                        </button>
+                    
+                        <!-- Cantidad -->
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 relative" style="top: -2px;">
+                            {{ product.quantity }}
+                        </span>
+                    
+                        <!-- Botón "+" -->
+                        <button
+                            (click)="increase(product.id)"
+                            class="cursor-pointer px-2 py-0.5 bg-gray-300 hover:bg-gray-400 rounded text-black text-base leading-none flex items-center justify-center relative"
+                            style="top: -2px;" aria-label="Aumentar cantidad"> <!-- Ajusta el valor de -2px según sea necesario -->
+                            <strong>+</strong>
+                        </button>
                     </div>
                 </div>
         
@@ -175,7 +188,7 @@
     
     <hr class="border-t-2 border-gray-700 mt-6" />
     <div [ngClass]="cart().length === 0 ? 'hidden' : ''">
-        <span class="text-xl text-gray-900 dark:text-black">Total: {{ totalPrice() }}$</span>
+        <span class="text-xl text-gray-900 font-medium dark:text-black">Total: {{ totalPrice() }}$</span>
     </div>
     
 </div>

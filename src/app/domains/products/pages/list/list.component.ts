@@ -1,34 +1,45 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, Input, signal, SimpleChange, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ProductsComponent } from '@products/components/products/products.component';
 import { Product } from "@shared/models/product.model";
 import { ProductService } from '@shared/services/product.service';
 import { CartService } from '@shared/services/cart.service';
+import { CategoryService } from '@shared/services/category.service';
+import { Category } from '@shared/models/category.model';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-list',
-  imports: [CommonModule, ProductsComponent],
+  imports: [CommonModule, ProductsComponent, RouterModule],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
-export class ListComponent {
+export default class ListComponent {
 
   products = signal<Product[]> ([]);
+  categories = signal<Category[]>([]);
   cartService = inject(CartService);
 
+  @Input() categoryId?: number; // Recibimos el id de la categoría desde el router
   private productService = inject(ProductService);
+  private categoryService = inject(CategoryService);
 
+  constructor(private route: ActivatedRoute) {}
+  
   ngOnInit() {
-    this.productService.getProducts()
-    .subscribe({
-      next: (products) => {
-        this.products.set(products);
-      },
-      error: (error) => {
-        console.error('Error al obtener los productos:', error);
-      }
+    this.route.queryParams.subscribe(params => {
+      this.categoryId = +params['category_id'] || undefined; // Obtiene el category_id de la URL
+      this.getProducts(); // Actualiza los productos filtrados
     });
+    this.getCategories();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const categoryId = changes['categoryId'];
+    if(categoryId){
+      this.getProducts()
+    }
   }
 
   addToCart(product: Product) {
@@ -47,5 +58,29 @@ export class ListComponent {
     if (product) {
       product.rating = newRating;
     }
+  }
+
+  private getProducts() {
+    this.productService.getProducts(this.categoryId)
+    .subscribe({
+      next: (products) => {
+        this.products.set(products);
+      },
+      error: (error) => {
+        console.error('Error al obtener los productos:', error);
+      }
+    });
+  }
+
+  private getCategories() {
+    this.categoryService.getAllCategories()
+    .subscribe({
+      next: (categories) => {
+        this.categories.set(categories);
+      },
+      error: (error) => {
+        console.error('Error al obtener las categorías:', error);
+      }
+    })
   }
 }

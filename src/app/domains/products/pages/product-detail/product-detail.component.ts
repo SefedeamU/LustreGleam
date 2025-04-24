@@ -3,6 +3,7 @@ import { Product } from '@shared/models/product.model';
 import { CommonModule } from '@angular/common';
 
 import { ProductService } from '@shared/services/product.service';
+import { CartService } from '@shared/services/cart.service';
 @Component({
   selector: 'app-product-detail',
   imports: [CommonModule],
@@ -12,6 +13,10 @@ import { ProductService } from '@shared/services/product.service';
 export class ProductDetailComponent {
 
   private productService = inject(ProductService);
+  private cartService = inject(CartService)  
+
+  showOverlay = false;
+
   @Input() id?:number;
   product = signal<Product | null>(null);
 
@@ -29,5 +34,12 @@ export class ProductDetailComponent {
       });
     }
   }
-  
+
+  addToCartHandler() {
+  const product = this.product();
+    if (product) {
+      this.cartService.addProduct(product);
+    }
+  }
 }
+
