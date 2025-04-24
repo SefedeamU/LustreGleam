@@ -42,7 +42,7 @@
             <div class="flex items-center space-x-1 rtl:space-x-reverse">
                 @for (i of [0, 1, 2, 3, 4]; track i) {
                     <svg
-                        class="w-4 h-4"
+                        class="w-4 h-4 cursor-pointer"
                         [ngClass]="i < product.rating ? 'text-yellow-300' : 'text-gray-200 dark:text-gray-600'"
                         (click)="setRating(i + 1)"
                         fill="currentColor"
