@@ -1,17 +1,5 @@
 <div class="bg-gray-100 min-h-screen py-8 px-4">
   <div class="container mx-auto">
-    <div>
-      <ul>
-        <li>
-            <a routerLink="/" [queryParams]="{}">All</a>
-        </li>
-        @for(category of categories(); track category) {
-          <li class="text-gray-700 text-sm font-semibold mb-2">
-            <a routerLink="/"[queryParams]="{category_id: category.id}">{{ category.name }}</a>
-          </li>
-        }
-      </ul>
-    </div>
     <div
       class="grid gap-6
             grid-cols-1
@@ -21,10 +9,9 @@
             xl:grid-cols-5
             justify-items-center">
 
-      @for(product of products(); track product) {
+      @for(product of productService.products(); track product) {
         <app-products [product]="product"></app-products>
       }
-
     </div>
   </div>
 </div>

@@ -17,22 +17,19 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 })
 export default class ListComponent {
 
-  products = signal<Product[]> ([]);
-  categories = signal<Category[]>([]);
   cartService = inject(CartService);
+  productService = inject(ProductService);
 
   @Input() categoryId?: number; // Recibimos el id de la categoría desde el router
-  private productService = inject(ProductService);
-  private categoryService = inject(CategoryService);
 
   constructor(private route: ActivatedRoute) {}
-  
+
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.categoryId = +params['category_id'] || undefined; // Obtiene el category_id de la URL
-      this.getProducts(); // Actualiza los productos filtrados
+      this.productService.loadProducts(this.categoryId); // Llama al servicio para cargar los productos
     });
-    this.getCategories();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -54,33 +51,12 @@ export default class ListComponent {
 
   fromChildRating(newRating: number, productId: number) {
     console.log(`Nuevo rating para el producto con ID ${productId}: ${newRating}`);
-    const product = this.products().find(p => p.id === productId);
+    const product = this.productService.products().find(p => p.id === productId);
     if (product) {
       product.rating = newRating;
     }
   }
-
   private getProducts() {
-    this.productService.getProducts(this.categoryId)
-    .subscribe({
-      next: (products) => {
-        this.products.set(products);
-      },
-      error: (error) => {
-        console.error('Error al obtener los productos:', error);
-      }
-    });
-  }
-
-  private getCategories() {
-    this.categoryService.getAllCategories()
-    .subscribe({
-      next: (categories) => {
-        this.categories.set(categories);
-      },
-      error: (error) => {
-        console.error('Error al obtener las categorías:', error);
-      }
-    })
+    this.productService.loadProducts(this.categoryId)
   }
 }
