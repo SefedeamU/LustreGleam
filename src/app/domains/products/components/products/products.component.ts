@@ -28,7 +28,7 @@ import { CartService } from '@shared/services/cart.service';
       ])
     ])
   ]
-  
+
 })
 
 export class ProductsComponent {
@@ -48,7 +48,9 @@ export class ProductsComponent {
     }, 1500);
   }
 
+  /*
   setRating(newRating: number) {
     this.product.rating = newRating;
   }
+  */
 }

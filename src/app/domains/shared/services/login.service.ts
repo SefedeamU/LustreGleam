@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 
 import { UserLogin } from '@shared/models/userLogin.model';
+import { environment } from './environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,8 @@ import { UserLogin } from '@shared/models/userLogin.model';
 export class LoginService {
   showLoginModal = signal(false);
   private http = inject(HttpClient);
+
+  readonly url = environment.api_usuarios;
 
   login(user: UserLogin): void {
     console.log('Intentando iniciar sesión con:', user);

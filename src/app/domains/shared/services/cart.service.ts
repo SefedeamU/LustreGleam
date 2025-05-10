@@ -8,8 +8,8 @@ import { CartItem } from '../models/cartItem.model';
 export class CartService {
   cart = signal<CartItem[]>([]); // Estado del carrito
   total = computed(() =>
-    this.cart().reduce((sum, item) => sum + (item.price * item.quantity), 0)
-  ); // Total Neto calculado  
+    this.cart().reduce((sum, item) => sum + (item.precio * item.quantity), 0)
+  ); // Total Neto calculado
   hideCart = signal<boolean>(true); // Estado de visibilidad del carrito
 
   constructor() {}
@@ -41,11 +41,11 @@ export class CartService {
 
   addProduct(product: Product) {
     this.cart.update((prevCart) => {
-      const existingProduct = prevCart.find(item => item.id === product.id);
+      const existingProduct = prevCart.find(item => item.id_producto === product.id_producto);
       if (existingProduct) {
         // Incrementamos cantidad si ya existe
         return prevCart.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id_producto === product.id_producto ? { ...item, quantity: item.quantity + 1 } : item
         );
       } else {
         // Lo agregamos con cantidad 1
@@ -55,34 +55,34 @@ export class CartService {
   }
 
   removeProduct(product: Product) {
-    this.cart.update((prevCart) => prevCart.filter((item) => item.id !== product.id));
+    this.cart.update((prevCart) => prevCart.filter((item) => item.id_producto !== product.id_producto));
   }
 
   increaseQuantity(productId: number) {
     this.cart.update(cart =>
       cart.map(item =>
-        item.id === productId
+        item.id_producto === productId
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
     );
   }
-  
+
   decreaseQuantity(productId: number) {
     this.cart.update(cart => {
-      const item = cart.find(p => p.id === productId);
+      const item = cart.find(p => p.id_producto === productId);
       if (!item) return cart;
-  
+
       if (item.quantity <= 1) {
-        return cart.filter(p => p.id !== productId);
+        return cart.filter(p => p.id_producto !== productId);
       }
-  
+
       return cart.map(p =>
-        p.id === productId
+        p.id_producto === productId
           ? { ...p, quantity: p.quantity - 1 }
           : p
       );
     });
   }
-  
+
 }

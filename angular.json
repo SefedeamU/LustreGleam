@@ -36,7 +36,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/lustre-gleam",
             "index": "src/index.html",
@@ -112,7 +112,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts":  [
+              "node_modules/flowbite/dist/flowbite.min.js"
+            ]
+
           }
         }
       }

@@ -10,19 +10,19 @@
     }
 
     <!-- CONTENEDOR DE IMAGEN -->
-    <a [routerLink]="['/product', product.id]">
+    <a [routerLink]="['/product', product.id_producto]">
         <div class="relative w-full aspect-[4/3] bg-gray-200 overflow-hidden rounded-t-lg">
 
         <!-- Imagen de fondo difuminada -->
             <img
-            [src]="product.images"
+            [src]="product.imagen_url"
             alt="Imagen fondo"
             class="absolute inset-0 w-full h-full object-cover blur-md scale-110 opacity-40" />
 
             <!-- Imagen principal proporcional -->
             <div class="relative z-10 flex items-center justify-center w-full h-full">
             <img
-                [src]="product.images"
+                [src]="product.imagen_url"
                 alt="Imagen producto"
                 class="max-w-full max-h-full object-contain transition-transform duration-200 hover:scale-105 drop-shadow-md rounded-t-lg" />
             </div>
@@ -31,13 +31,13 @@
 
     <!-- CONTENIDO DEL CARD -->
     <div class="bg-white dark:bg-gray-800 px-4 py-4 flex flex-col justify-between gap-2 rounded-b-lg">
-            <a [routerLink]="['/product', product.id]">
+            <a [routerLink]="['/product', product.id_producto]">
                 <h5 class="text-sm sm:text-base font-semibold tracking-tight text-gray-900 dark:text-white line-clamp-2">
-                    {{ product.title }}
+                    {{ product.nombre }}
                 </h5>
             </a>
 
-            <!-- RATING -->
+            <!-- RATING REPARAR EVENTUALMENTE
         <div class="flex items-center">
             <div class="flex items-center space-x-1 rtl:space-x-reverse">
                 @for (i of [0, 1, 2, 3, 4]; track i) {
@@ -56,14 +56,15 @@
                     {{ product.rating }}
                 </span>
         </div>
+                -->
 
             <!-- PRECIO + BOTÓN -->
             <div class="flex flex-col space-y-1">
                 <span class="text-lg font-bold text-gray-900 dark:text-white">
-                    {{ product.price | currency : "$" : "symbol" : "1.2" }}
+                    {{ product.precio | currency : "$" : "symbol" : "1.2" }}
                 </span>
                 <span class="text-xs text-gray-500 dark:text-white">
-                    {{ product.creationAt | timeAgo }}
+                    {{ product.fecha_creacion | timeAgo }}
                 </span>
                 <button
                     (click)="addToCartHandler()"

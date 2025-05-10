@@ -1,20 +1,98 @@
-<div class="bg-gray-100 min-h-screen py-8 px-4">
-    <div class="container mx-auto">
-        <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            @for(category of categoryService.categories(); track category) {
-                <a 
-                    routerLink="/list" 
-                    [queryParams]="{ category_id: category.id }" 
-                    class="bg-white shadow-md rounded-lg overflow-hidden block">
-                    <!-- Imagen estática -->
-                    <img src="/img/1.jpg" alt="Imagen de categoría" class="w-full h-32 object-cover">
-                    
-                    <!-- Nombre de la categoría -->
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ category.name }}</h3>
-                    </div>
-                </a>
-            }
+<!-- Banner Promocional Superior -->
+<section class="bg-gradient-to-r from-blue-600 to-purple-600 text-black py-6 px-4 text-center">
+  <h2 class="text-5xl font-bold mb-2"><i class="fas fa-bolt"></i> ¡Ofertas de Temporada!</h2>
+  <p class="text-2xl">Descubre nuestras categorías más populares y aprovecha hasta 10% de descuento en la tienda más cara del país🔥</p>
+</section>
+
+<!-- Contenedor general -->
+<div class="max-w-6xl mx-auto mt-10 mb-10 bg-white rounded-2xl shadow-lg border-2 border-gray-200 px-4 py-8">
+
+  <!-- Título del carrusel -->
+  <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2 mb-8">
+    <i class="fas fa-th-large text-blue-600"></i> Categorías Destacadas
+  </h2>
+
+  <!-- Carrusel -->
+  <div *ngIf="categories.length > 0" class="flex justify-center w-full mb-10">
+    <div class="w-full max-w-5xl mx-auto">
+      <div class="relative border-2 border-gray-300 rounded-xl shadow-lg bg-white overflow-hidden">
+        <div class="relative h-120 md:h-[34rem]">
+          <div class="w-full h-full relative">
+            <div
+              *ngFor="let category of categories; let i = index"
+              class="absolute top-0 left-0 w-full h-full transition-transform duration-700 ease-in-out"
+              [ngStyle]="{
+                transform: 'translateX(' + ((i - currentSlide) * 100) + '%)',
+                zIndex: i === currentSlide ? 10 : 1
+              }"
+            >
+              <!-- Nombre arriba del recuadro -->
+              <div class="absolute top-0 left-0 right-0 z-20 bg-black/60 text-white/80 text-center py-1 text-base font-semibold rounded-t-xl">
+                {{ category.nombre }}
+              </div>
+              <a routerLink="/list"
+                [queryParams]="{ category_id: category.id }"
+                class="block w-full h-full hover:scale-105 transition-transform duration-300 relative">
+                <img [src]="'img/' + category.img"
+                    class="w-full h-full object-cover rounded-xl"
+                    [alt]="category.nombre" />
+              </a>
+            </div>
+          </div>
         </div>
+
+        <!-- Indicadores -->
+        <div class="absolute z-30 flex -translate-x-1/2 space-x-3 bottom-5 left-1/2">
+          <button
+            *ngFor="let category of categories; let i = index"
+            type="button"
+            class="w-3 h-3 rounded-full border-2 cursor-pointer"
+            [ngClass]="{
+              'bg-blue-600 border-blue-600': i === currentSlide,
+              'bg-white border-gray-400': i !== currentSlide
+            }"
+            [attr.aria-current]="i === currentSlide"
+            [attr.aria-label]="'Slide ' + (i + 1)"
+            (click)="showSlide(i)">
+          </button>
+        </div>
+
+        <!-- Controles -->
+        <button (click)="prevSlide()" class="cursor-pointer absolute top-0 start-0 z-30 h-full px-4 flex items-center justify-center">
+          <span class="w-10 h-10 rounded-full bg-gray-400/60 hover:bg-white/50 flex items-center justify-center">
+            <i class="fas fa-chevron-left text-white"></i>
+          </span>
+        </button>
+        <button (click)="nextSlide()" class="cursor-pointer absolute top-0 end-0 z-30 h-full px-4 flex items-center justify-center">
+          <span class="w-10 h-10 rounded-full bg-gray-400/60 hover:bg-white/10 flex items-center justify-center">
+            <i class="fas fa-chevron-right text-white"></i>
+          </span>
+        </button>
+      </div>
     </div>
+  </div>
+
+  <!-- Título de la galería -->
+  <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2 mb-6">
+    <i class="fas fa-tags text-green-600"></i> Explora por Categoría
+  </h2>
+
+  <!-- Galería tipo masonry -->
+  <div class="columns-2 md:columns-4 gap-4">
+    <ng-container *ngFor="let category of categories">
+      <div class="mb-4 break-inside-avoid">
+        <a routerLink="/list"
+            [queryParams]="{ category_id: category.id }"
+            class="block bg-gray-400/30 shadow-md rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 group">
+          <img class="w-full h-auto max-h-80 object-cover rounded-t-lg"
+                [src]="'img/' + category.img"
+                [alt]="category.nombre" />
+          <div class="p-4 text-center">
+            <h3 class="text-lg font-semibold text-gray-700">{{ category.nombre }}</h3>
+            <p class="text-sm text-gray-500">Ver productos →</p>
+          </div>
+        </a>
+      </div>
+    </ng-container>
+  </div>
 </div>

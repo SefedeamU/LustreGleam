@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+@import 'flowbite';
+
 body {
     background-color: #d1d5db; /* bg-gray-300 de Tailwind */
   }

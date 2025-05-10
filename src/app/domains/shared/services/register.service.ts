@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { UserRegister } from '@shared/models/userRegister.model';
 
+import { environment } from './environment';
+
 @Injectable({
   providedIn: 'root'
 })

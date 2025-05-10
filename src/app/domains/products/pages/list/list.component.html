@@ -1,17 +1,93 @@
-<div class="bg-gray-100 min-h-screen py-8 px-4">
-  <div class="container mx-auto">
+<div class="bg-gray-100 min-h-screen py-12 px-4">
+  <div class="w-full max-w-7xl mx-auto">
+
+    <!-- Título de la Sección -->
+    <div class="text-center mb-10">
+      <h2 class="text-4xl font-bold text-gray-800 flex items-center justify-center gap-3">
+        <i class="fas fa-store text-blue-600"></i> Productos Disponibles
+      </h2>
+      <p class="text-gray-600 mt-2 text-lg">Explora nuestra colección y encuentra el producto ideal para ti 🎯</p>
+    </div>
+
+      <!-- Categoría activa -->
+      <div *ngIf="currentCategory() as category" class="mb-12">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8 bg-white shadow-2xl rounded-2xl p-8 border border-gray-300 max-w-5xl mx-auto">
+          <div class="flex flex-col md:flex-row items-center gap-8 flex-1">
+            <img
+              [src]="'img/' + category.img"
+              [alt]="category.nombre"
+              class="w-32 h-32 md:w-48 md:h-48 rounded-xl object-cover border-4 border-blue-600 shadow-md"
+            />
+            <div class="text-center md:text-left">
+              <h3 class="text-3xl font-extrabold text-gray-800 mb-2">
+                <i class="fas fa-layer-group text-blue-600"></i> Categoría actual
+              </h3>
+              <p class="text-2xl text-gray-600 font-medium">
+                {{ category.nombre }}
+              </p>
+              <p class="text-gray-500 mt-2 max-w-md">
+                Encuentra los mejores productos de <span class="font-semibold">{{ category.nombre }}</span>. Calidad garantizada y opciones para todos los gustos 💥
+              </p>
+            </div>
+          </div>
+          <a
+            routerLink="/"
+            class="mt-6 md:mt-0 md:ml-8 inline-block px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow hover:bg-blue-700 transition"
+          >
+            <i class="fas fa-home mr-2"></i> Ir al inicio
+          </a>
+        </div>
+      </div>
+
+
+    <!-- Grilla de productos -->
     <div
       class="grid gap-6
-            grid-cols-1
-            sm:grid-cols-2
-            md:grid-cols-3
-            lg:grid-cols-4
-            xl:grid-cols-5
-            justify-items-center">
+              grid-cols-1
+              sm:grid-cols-2
+              md:grid-cols-3
+              lg:grid-cols-4
+              justify-items-center
+              px-2">
 
-      @for(product of productService.products(); track product) {
-        <app-products [product]="product"></app-products>
+      @for(product of productService.products(); track product.id_producto) {
+        <app-products [product]="product" class="m-2 w-full"></app-products>
       }
     </div>
+
+    <!-- Separador visual -->
+    <hr class="my-12 border-gray-300">
+
+    <!-- Paginado -->
+    <nav aria-label="Paginación de productos" class="flex justify-center mt-6">
+      <ul class="flex items-center space-x-2">
+        <!-- Botón anterior -->
+        <li>
+          <button
+            (click)="prevPage()"
+            [disabled]="currentPage === 0"
+            class="cursor-pointer flex items-center gap-2 px-4 h-10 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-200 hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="fas fa-chevron-left"></i> Anterior
+          </button>
+        </li>
+
+        <!-- Página actual -->
+        <li>
+          <span class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">
+            Página {{ currentPage + 1 }}
+          </span>
+        </li>
+
+        <!-- Botón siguiente -->
+        <li>
+          <button
+            (click)="nextPage()"
+            [disabled]="!productService.hasMore"
+            class="cursor-pointer flex items-center gap-2 px-4 h-10 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-200 hover:text-black transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            Siguiente <i class="fas fa-chevron-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>
