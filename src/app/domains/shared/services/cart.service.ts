@@ -1,18 +1,33 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 
 import { Product } from '../models/product.model';
 import { CartItem } from '../models/cartItem.model';
+import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  cart = signal<CartItem[]>([]); // Estado del carrito
+
+  private storageKey = 'app_cart_items';
+
+  private loadCartFromStorage(): CartItem[] {
+    const data = localStorage.getItem(this.storageKey);
+    return data ? JSON.parse(data) : [];
+  }
+
+  cart = signal<CartItem[]>(this.loadCartFromStorage()); // Estado del carrito
   total = computed(() =>
     this.cart().reduce((sum, item) => sum + (item.precio * item.quantity), 0)
-  ); // Total Neto calculado
+  );// Total Neto calculado
   hideCart = signal<boolean>(true); // Estado de visibilidad del carrito
+  cartBounce$ = new Subject<void>();
 
-  constructor() {}
+  constructor() {
+    // Suscribirse a cambios en el cart signal y guardarlos automáticamente
+    effect(() => {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.cart()));
+    });
+  }
 
   toggleCartVisibility() {
     this.hideCart.update((prevState) => !prevState);
@@ -39,19 +54,19 @@ export class CartService {
   }, 1500);
 }
 
-  addProduct(product: Product) {
-    this.cart.update((prevCart) => {
-      const existingProduct = prevCart.find(item => item.id_producto === product.id_producto);
-      if (existingProduct) {
-        // Incrementamos cantidad si ya existe
-        return prevCart.map(item =>
-          item.id_producto === product.id_producto ? { ...item, quantity: item.quantity + 1 } : item
+addProduct(product: Product) {
+    this.cart.update(prevCart => {
+      const existing = prevCart.find(p => p.id_producto === product.id_producto);
+      if (existing) {
+        return prevCart.map(p =>
+          p.id_producto === product.id_producto
+            ? { ...p, quantity: p.quantity + 1 }
+            : p
         );
-      } else {
-        // Lo agregamos con cantidad 1
-        return [...prevCart, { ...product, quantity: 1 }];
       }
+      return [...prevCart, { ...product, quantity: 1 }];
     });
+    this.cartBounce$.next();
   }
 
   removeProduct(product: Product) {

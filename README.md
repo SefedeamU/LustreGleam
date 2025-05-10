@@ -1,59 +1,95 @@
-# LustreGleam
+# Guía rápida de despliegue Angular en S3 🚀
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
+Esta guía explica cómo compilar y desplegar tu frontend Angular en Amazon S3 de forma eficiente y profesional.
 
-## Development server
+---
 
-To start a local development server, run:
+## ✅ Actualizar el frontend Angular en S3
 
-```bash
-ng serve
+### 1. 🔧 Compilar el proyecto Angular
+
+Desde la raíz del proyecto, ejecuta:
+
+```powershell
+ng build --configuration production
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Esto generará la carpeta `dist/` con el build optimizado (usualmente en `dist/lustre-gleam/browser/` si usas Angular Universal o prerender).
 
-## Code scaffolding
+---
+### 2. 🔑 Configuración de credenciales AWS
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Antes de ejecutar los comandos de AWS, asegúrate de tener configuradas tus credenciales de acceso.  
+Puedes hacerlo ubicandote en tu disco 'C:' y editando el archivo:
 
-```bash
-ng generate component component-name
+```
+vim ./.aws/credentials
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Ejemplo de contenido:
 
-```bash
-ng generate --help
+```
+[default]
+aws_access_key_id = TU_ACCESS_KEY
+aws_secret_access_key = TU_SECRET_KEY
 ```
 
-## Building
+### 3. ☁️ Subir la nueva versión a S3
 
-To build the project run:
+Ubícate en la carpeta `browser` (donde está el `index.html`):
 
-```bash
-ng build
+```powershell
+cd .\dist\lustre-gleam\browser\
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Sincroniza los archivos con tu bucket S3:
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+```powershell
+aws s3 sync . s3://lustre-gleam-web-public --delete
 ```
 
-## Running end-to-end tests
+**Este comando:**
+- Sube solo los archivos modificados
+- Elimina los archivos que ya no existen
+- Mantiene la estructura de carpetas
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
+## 🧠 Creación
+
+Latimosaomente no se puede automatizar directamente el despliegue al bucket s3 debido a problemas de roles con LabRole, sin embargo, aún así podemos crear el bucket con permisos de consulta publica si es que no lo tenemos aún para luego desde la consola de AWS subiendo los archivos manualmente de la carpeta "browser":
+
+```powershell
+# deploy.ps1
+Write-Host "🔧 Compilando Angular... :"
+ng build --configuration production
+
+Write-Host "☁️ Creando el bucket S3... :"
+
+aws s3api create-bucket `
+  --bucket lustre-gleam-web `
+  --region us-east-1 `
+  --object-ownership BucketOwnerPreferred
+
+Write-Host "☁️ Configurar el hosting de pagina web estática:"
+
+aws s3 website s3://lustre-gleam-web/ `
+  --index-document index.html `
+  --error-document index.html
+
+Write-Host "Por si necesitas borrar el bucker:"
+
+aws s3 rb s3://lustre-gleam-web --force
+
+Write-Host "✅ Despliegue completado"
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+¡Listo! Así mantienes tu frontend actualizado en S3 de forma rápida y segura. ✨
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Puedes revisar la página desplegada en linea visitando el siguiente enlace:
+
+```link
+http://lustre-glam.s3-website-us-east-1.amazonaws.com
+```

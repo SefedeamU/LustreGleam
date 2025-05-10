@@ -42,7 +42,7 @@ export class ProductService {
 
   // Obtener un producto por su ID
   getProductById(id: number) {
-    return this.http.get<Product>(`http://${this.url}/productos/${id}`);
+    return this.http.get<Product>(`${this.url}/productos/${id}`);
   }
 
   get hasMore(): boolean {

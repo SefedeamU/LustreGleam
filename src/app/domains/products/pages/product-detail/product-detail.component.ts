@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { ProductService } from '@shared/services/product.service';
 import { CartService } from '@shared/services/cart.service';
+
 @Component({
   selector: 'app-product-detail',
   imports: [CommonModule],
@@ -13,7 +14,7 @@ import { CartService } from '@shared/services/cart.service';
 export class ProductDetailComponent {
 
   private productService = inject(ProductService);
-  private cartService = inject(CartService)  
+  private cartService = inject(CartService)
 
   showOverlay = false;
 

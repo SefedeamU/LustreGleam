@@ -1,194 +1,122 @@
+<!-- 🔝 HEADER PRINCIPAL -->
+<nav class="w-full bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4 py-3">
+    <!-- Logo -->
+    <a routerLink="/" class="flex items-center space-x-3">
+      <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Logo" />
+      <span class="text-2xl font-bold dark:text-white text-gray-900 tracking-wide">Lustre Glam</span>
+    </a>
 
-
-<nav class="w-full bg-white border-gray-200 dark:bg-gray-900">
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Lustre Glam</span>
-        </a>
-            <div class="flex items-center md:order-2 space-x-6 md:space-x-0 rtl:space-x-reverse">
-                <!-- Botón de carrito -->
-                <button (click)="cartHandler()" type="button" class="cursor-pointer border relative flex text-sm mr-4 bg-white rounded-full p-2 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 group">
-                    <span class="sr-only">Open cart</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-800 group-hover:text-gray-600">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                    </svg>
-                    <strong [ngClass]="cart().length === 0 ? 'hidden' : ''" class="absolute -top-2 -left-2 rounded h-5 w-5 bg-white text-black text-xs group-hover:bg-gray-100 group-hover:text-gray-600">{{ cart().length }}</strong>
-                </button>
-                <!-- Botón de Usuario -->
-                    <!-- Botón de usuario o "Iniciar Sesión" -->
-                    @if(!isAuthenticated){
-                        <button
-                            type="button"
-                            class="cursor-pointer flex text-sm bg-blue-600 text-white rounded-full px-4 py-2 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
-                            (click)="openLoginModal()"
-                        >
-                        Iniciar Sesión
-                        </button>
-                    } @if(isAuthenticated){
-                        <button type="button" class="cursor-pointer flex text-sm bg-white rounded-full p-2 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
-                            <span class="sr-only">Open user menu</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-800 hover:text-gray-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                                </svg>
-                        </button>
-                    }
-                    @if(showLoginModal()){
-                        <!-- Modal de inicio de sesión -->
-                        <app-login></app-login>
-                    }
-                <!-- Dropdown menu -->
-                <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
-                    <div class="px-4 py-3">
-                        <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                        <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">name.com</span>
-                    </div>
-                    <ul class="py-2" aria-labelledby="user-menu-button">
-                        <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
-                        </li>
-                        <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
-                        </li>
-                        <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
-                        </li>
-                        <li>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-                        </li>
-                    </ul>
-                </div>
-                <button data-collapse-toggle="navbar-user" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-user" aria-expanded="false">
-                    <span class="sr-only">Open main menu</span>
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-                    </svg>
-                </button>
-            </div>
-        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
-        <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <li>
-                <a
-                routerLink="/"
-                [routerLinkActive]="['!text-blue-700', '!font-bold', '!underline']"
-                [routerLinkActiveOptions]="{ exact: true }"
-                class="block py-2 px-3 rounded-sm md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700"
-                >
-                Home
-                </a>
-            </li>
-            <li>
-                <a
-                routerLink="/catalog"
-                [routerLinkActive]="['!text-blue-700', '!font-bold', '!underline']"
-                class="block py-2 px-3 rounded-sm md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700"
-                >
-                Catalog
-                </a>
-            </li>
-            <li>
-                <a
-                routerLink="/about"
-                [routerLinkActive]="['!text-blue-700', '!font-bold', '!underline']"
-                class="block py-2 px-3 rounded-sm md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700"
-                >
-                About
-                </a>
-            </li>
-            <li>
-                <a
-                routerLink="/contact"
-                [routerLinkActive]="['!text-blue-700', '!font-bold', '!underline']"
-                class="block py-2 px-3 rounded-sm md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700"
-                >
-                Contact
-                </a>
-            </li>
-        </ul>
-        </div>
+    <!-- Navegación -->
+    <div class="cursor-pointer hidden md:flex gap-6 text-gray-700 dark:text-white font-medium">
+      <a routerLink="/" routerLinkActive="text-blue-600 font-semibold underline" [routerLinkActiveOptions]="{ exact: true }" >Catálogo</a>
+      <a routerLink="/about" routerLinkActive="text-blue-600 font-semibold underline">Acerca de</a>
+      <a routerLink="/contact" routerLinkActive="text-blue-600 font-semibold underline">Contacto</a>
     </div>
+
+    <!-- Acciones del Header -->
+    <div class="flex items-center gap-4">
+      <!-- 🛒 Botón Carrito -->
+      <button (click)="cartHandler()" type="button"
+        class="cursor-pointer relative flex items-center justify-center p-2 rounded-full bg-white hover:bg-gray-100 border border-gray-300 transition dark:bg-gray-800 dark:hover:bg-gray-700">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" stroke-width="1.5"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75M7.5 14.25h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25L5.106 5.272" />
+        </svg>
+        <span *ngIf="cart().length > 0"
+          [@bounce]="bounceKey"
+          class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold shadow">
+          {{ cart().length }}
+        </span>
+      </button>
+
+      <!-- 🔐 Botón Login -->
+      @if(!isAuthenticated){
+        <button (click)="openLoginModal()" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+          Iniciar Sesión
+        </button>
+      }
+      @if(isAuthenticated){
+        <button class="cursor-pointer bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-full hover:bg-gray-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 6a3.75 3.75 0 1 1-7.5 0M4.5 20.118a7.5 7.5 0 0 1 15 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.5-1.632" />
+          </svg>
+        </button>
+      }
+
+      @if(showLoginModal()){
+        <app-login></app-login>
+      }
+    </div>
+  </div>
 </nav>
 
-<!--Carrito de compras-->
-<div class="bg-gray-300 fixed border-l-4 border-white dark:border-gray-900 top-0 right-0 z-40 w-100 h-screen p-4 overflow-y-auto transition-transform"
-    [ngClass]="hideCart() ? 'translate-x-full' : 'translate-x-0'">
-    <div class="flex justify-between items-center">
-        <p class="text-xl"> <strong class="font-medium">My Cart</strong> </p>
-    <button (click)="cartHandler()" class="cursor-pointer ms-auto p-2 rounded-full hover:bg-gray-100 focus:outline-none">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-            >
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-            />
-            </svg>
-        </button>
-    </div>
+<!-- 🛒 PANEL DE CARRITO SLIDE-IN -->
+<div
+  class="fixed top-0 right-0 z-50 w-[92%] sm:w-[420px] max-w-full h-full bg-white dark:bg-gray-900 shadow-2xl border-l border-gray-300 dark:border-gray-700 transition-transform duration-300 ease-in-out"
+  [ngClass]="hideCart() ? 'translate-x-full' : 'translate-x-0'">
 
-    <!-- Elementos del carrito de compras-->
-    @for(product of cart(); track product.id_producto){
-        <div @dropToCart @removeFromCart class="mt-4 w-72 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-            <div class="px-4 pb-4">
-                <div class="flex items-center mt-2">
-                <img class="w-16 h-16 p-2 rounded-t-lg" [src]="product.imagen_url" alt="product image" />
+  <!-- Header del carrito -->
+  <div class="flex justify-between items-center p-5 border-b border-gray-200 dark:border-gray-700">
+    <h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+      <i class="fas fa-shopping-cart text-blue-600"></i> Mi Carrito
+    </h2>
+    <button (click)="cartHandler()" class="cursor-pointer text-gray-600 dark:text-gray-300 hover:text-red-500 transition">
+      <i class="fas fa-times text-xl"></i>
+    </button>
+  </div>
 
-                <div class="flex flex-col space-y-2 ml-4">
-                    <h5 class="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
-                    {{ product.nombre }}
-                    </h5>
-                    <p class="text-sm text-gray-700 dark:text-gray-300">
-                    Precio unitario: {{ product.precio }}$
-                    </p>
-                    <p class="text-sm text-gray-700 dark:text-gray-300">
-                    Total: {{ product.precio * product.quantity }}$
-                    </p>
+  <!-- Lista de productos -->
+  <div class="p-5 overflow-y-auto max-h-[calc(100vh-200px)]">
+    <ng-container *ngIf="cart().length > 0; else emptyCart">
+      <div *ngFor="let product of cart(); trackBy: trackById" @dropToCart @removeFromCart
+        class="mb-5 flex items-start gap-4 border-b pb-4">
+        <img [src]="product.imagen_url" alt="product" class="w-20 h-20 rounded-lg object-cover" />
 
-                    <!-- Botones de cantidad -->
-                    <div class="flex items-center space-x-2" style="padding-top: 0.7rem; padding-bottom: 0.7rem;">
-                        <!-- Botón "-" -->
-                        <button
-                            (click)="decrease(product.id_producto)"
-                            class="cursor-pointer px-2 py-0.5 bg-gray-300 hover:bg-gray-400 rounded text-black text-base leading-none flex items-center justify-center relative"
-                            style="top: -2px;" aria-label="Disminuir cantidad"> <!-- Ajusta el valor de -2px según sea necesario -->
-                            <strong>-</strong>
-                        </button>
+        <div class="flex-1">
+          <h3 class="font-semibold text-gray-900 dark:text-white truncate">{{ product.nombre }}</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Precio: {{ product.precio | currency }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Subtotal: {{ product.precio * product.quantity | currency }}</p>
 
-                        <!-- Cantidad -->
-                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 relative" style="top: -2px;">
-                            {{ product.quantity }}
-                        </span>
-
-                        <!-- Botón "+" -->
-                        <button
-                            (click)="increase(product.id_producto)"
-                            class="cursor-pointer px-2 py-0.5 bg-gray-300 hover:bg-gray-400 rounded text-black text-base leading-none flex items-center justify-center relative"
-                            style="top: -2px;" aria-label="Aumentar cantidad"> <!-- Ajusta el valor de -2px según sea necesario -->
-                            <strong>+</strong>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Botón de eliminar -->
-                <button (click)="removeFromCart(product)" class="cursor-pointer ms-auto p-2 rounded-full bg-gray-800 hover:bg-gray-700 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-                </div>
-            </div>
+          <!-- Controles -->
+          <div class="flex items-center mt-2 gap-2">
+            <button (click)="decrease(product.id_producto)"
+              class="cursor-pointer px-2 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 rounded text-black dark:text-white">
+              <i class="fas fa-minus"></i>
+            </button>
+            <span class="text-sm text-gray-800 dark:text-white">{{ product.quantity }}</span>
+            <button (click)="increase(product.id_producto)"
+              class="cursor-pointer px-2 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 rounded text-black dark:text-white">
+              <i class="fas fa-plus"></i>
+            </button>
+            <button (click)="removeFromCart(product)"
+              class="ml-auto text-red-500 hover:text-red-700 transition">
+              <i class="cursor-pointer fas fa-trash-alt"></i>
+            </button>
+          </div>
         </div>
-    }
+      </div>
+    </ng-container>
 
-    <hr class="border-t-2 border-gray-700 mt-6" />
-    <div [ngClass]="cart().length === 0 ? 'hidden' : ''">
-        <span class="text-xl text-gray-900 font-medium dark:text-black">Total: {{ totalPrice() }}$</span>
+    <!-- Carrito vacío -->
+    <ng-template #emptyCart>
+      <div class="text-center py-20 text-gray-500 dark:text-gray-400">
+        <i class="fas fa-shopping-basket text-4xl mb-4"></i>
+        <p>Tu carrito está vacío</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Total -->
+  <div *ngIf="cart().length > 0" class="p-5 border-t border-gray-200 dark:border-gray-700">
+    <div class="flex justify-between text-lg font-semibold text-gray-800 dark:text-white">
+      <span>Total:</span>
+      <span class="text-green-600 dark:text-green-400">{{ totalPrice() | currency }}</span>
     </div>
-
+    <button class="cursor-pointer mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg shadow-md transition">
+      Proceder al Pago
+    </button>
+  </div>
 </div>

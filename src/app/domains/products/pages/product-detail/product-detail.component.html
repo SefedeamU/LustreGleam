@@ -1,48 +1,73 @@
 @if (product(); as product) {
-<div class="min-h-screen bg-gray-100 py-10 px-4 md:px-0 flex justify-center">
-    <div class="w-full max-w-screen-lg bg-white shadow-xl rounded-xl overflow-hidden p-6 md:p-10 flex flex-col md:flex-row gap-10 transition-all duration-300">
-        <!-- Galería de imágenes (Carousel) -->
-        <div class="w-full md:w-1/2">
-            <div id="animation-carousel" class="relative w-full" data-carousel="static">
-              <div class="relative h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden rounded-lg shadow-md border border-gray-200">
-                <img [src]="product.imagen_url"
-                    class="absolute block w-full h-full object-cover object-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                    alt="Imagen del producto">
-              </div>
-                <!-- Controles SON LOS CONTROLES DEL CARRUSEL, IMNPLEMENTAR CUANDO EL BACKEND TENGA MAS IMAGENS
-                <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/40 hover:bg-white/60 transition">
-                    <svg class="w-4 h-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                    </svg>
-                </span>
-                </button>
-                <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/40 hover:bg-white/60 transition">
-                    <svg class="w-4 h-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                    </svg>
-                </span>
-                </button>-->
-            </div>
-            </div>
-            <!-- Detalles del producto -->
-            <div class="w-full md:w-1/2 flex flex-col justify-between">
-            <div>
-                <h2 class="text-xs md:text-sm text-gray-500 uppercase tracking-wider mb-1">{{ product.categorias[1] }}</h2>
-                <h1 class="text-2xl md:text-4xl font-semibold text-gray-900 mb-3">{{ product.nombre }}</h1>
-                <p class="text-gray-700 text-sm md:text-base mb-4 leading-relaxed">
-                {{ product.direccion }}
-                </p>
-                <div class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">{{ product.precio | currency}} </div>
-                <button (click)="addToCartHandler()" class="cursor-pointer bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 shadow-md w-full md:w-auto">
-                Add To Cart
-                </button>
-            </div>
-            <p class="mt-6 text-xs text-gray-400">
-                Producto añadido el: {{ product.fecha_creacion | date:'medium' }}
-            </p>
-            </div>
+  <section class="min-h-screen bg-gray-100 py-12 px-4 md:px-6 flex justify-center pt-24">
+    <div class="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row gap-10 p-8">
+
+      <!-- Imagen -->
+      <div class="w-full md:w-1/2">
+        <div class="relative w-full h-[350px] md:h-[500px] overflow-hidden rounded-xl border border-gray-200 shadow-md">
+          <img [src]="product.imagen_url"
+              alt="Imagen del producto"
+              class="absolute inset-0 w-full h-full object-cover object-center" />
         </div>
+
+        <!-- Galería futura o thumbnails AGREGAR
+        <div class="flex mt-4 gap-2 justify-center md:justify-start opacity-50">
+          <div class="w-16 h-16 bg-gray-200 rounded-lg"></div>
+          <div class="w-16 h-16 bg-gray-200 rounded-lg"></div>
+          <div class="w-16 h-16 bg-gray-200 rounded-lg"></div>
+        </div> -->
+      </div>
+
+      <!-- Detalles del producto -->
+      <div class="w-full md:w-1/2 flex flex-col justify-between">
+        <div>
+          <!-- Categoría principal -->
+          <span class="inline-flex items-center gap-2 bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full mb-3">
+            <i class="fas fa-tags"></i> {{ product.categorias[0].nombre }}
+          </span>
+
+          <!-- Título del producto -->
+          <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+            {{ product.nombre }}
+          </h1>
+
+          <!-- Dirección o descripción -->
+          <p class="text-gray-700 text-base md:text-lg leading-relaxed mb-6">
+            {{ product.direccion }}
+          </p>
+
+          <!-- Precio -->
+          <div class="text-3xl font-bold text-green-600 mb-4">
+            {{ product.precio | currency:'USD':'symbol' }}
+          </div>
+
+          <!-- Botón agregar al carrito -->
+          <button (click)="addToCartHandler()"
+                  class="cursor-pointer w-full md:w-auto bg-gradient-to-r hover:bg-blue-800 bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg transition duration-300 text-center flex items-center justify-center gap-2">
+            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+          </button>
+
+          <!-- Detalles adicionales -->
+          <div class="mt-6 text-sm text-gray-600 space-y-2">
+            <p><i class="fas fa-box-open text-gray-400"></i> <span class="font-medium">Stock disponible:</span> {{ product.stock }}</p>
+            <p><i class="fas fa-user-tie text-gray-400"></i> <span class="font-medium">Proveedor:</span> {{ product.proveedor }}</p>
+            <p><i class="fas fa-calendar-alt text-gray-400"></i> <span class="font-medium">Fecha de publicación:</span> {{ product.fecha_creacion | date:'mediumDate' }}</p>
+          </div>
+        </div>
+
+        <!-- Categorías adicionales -->
+        <div class="mt-8">
+          <h3 class="text-sm text-gray-500 mb-2">Otras categorías asociadas:</h3>
+          <div class="flex flex-wrap gap-2">
+            <span
+              *ngFor="let c of product.categorias.slice(1)"
+              class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs"
+            >
+              {{ c.nombre }}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 }

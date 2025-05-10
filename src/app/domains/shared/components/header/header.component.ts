@@ -2,11 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLinkWithHref ,RouterLinkActive } from '@angular/router';
 
+import { Subscription } from 'rxjs';
+
 import { Product } from "@shared/models/product.model";
 import { CartService } from '@shared/services/cart.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LoginComponent } from "@shared/components/login/login.component"
 import { LoginService } from '@shared/services/login.service';
+
 @Component({
   selector: 'app-header',
   imports: [CommonModule, RouterLinkActive, LoginComponent, RouterLinkWithHref],
@@ -36,6 +39,13 @@ import { LoginService } from '@shared/services/login.service';
           opacity: 0 // Se desvanece
         }))
       ])
+    ]),
+    trigger('bounce', [
+      transition(':increment', [
+        style({ transform: 'translateY(0)' }),
+        animate('200ms cubic-bezier(.68,-0.55,.27,1.55)', style({ transform: 'translateY(-12px)' })),
+        animate('120ms', style({ transform: 'translateY(0)' }))
+      ])
     ])
   ]
 })
@@ -43,13 +53,25 @@ export class HeaderComponent {
 
   private cartService = inject(CartService); // Inyectamos el servicio
   private loginService = inject(LoginService);
-  
+  private bounceSub?: Subscription;
+
+  bounceKey = 0;
   cart = this.cartService.cart; // Obtenemos el carrito del servicio
   hideCart = this.cartService.hideCart; // Obtenemos el estado de visibilidad del carrito
   totalPrice = this.cartService.total; // Obtenemos el total calculado
 
   isAuthenticated = false;
   showLoginModal = this.loginService.showLoginModal;
+
+  ngOnInit() {
+    this.bounceSub = this.cartService.cartBounce$.subscribe(() => {
+      this.bounceKey++;
+    });
+  }
+
+  ngOnDestroy() {
+    this.bounceSub?.unsubscribe();
+  }
 
   cartHandler() {
     this.cartService.toggleCartVisibility(); // Cambiamos la visibilidad del carrito
@@ -66,14 +88,19 @@ export class HeaderComponent {
     this.cartService.addProduct(product);
   }
 
+  trackById(index: number, item: any) {
+    return item.id_producto;
+  }
+
+
   increase(productId: number) {
     this.cartService.increaseQuantity(productId);
   }
-  
+
   decrease(productId: number) {
     this.cartService.decreaseQuantity(productId);
   }
-  
+
 
   checkAuthentication() {
     this.isAuthenticated = false;
