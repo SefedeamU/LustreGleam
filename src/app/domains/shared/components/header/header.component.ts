@@ -8,7 +8,7 @@ import { Product } from "@shared/models/product.model";
 import { CartService } from '@shared/services/cart.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LoginComponent } from "@shared/components/login/login.component"
-import { LoginService } from '@shared/services/login.service';
+import { AuthService } from '@shared/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -52,7 +52,7 @@ import { LoginService } from '@shared/services/login.service';
 export class HeaderComponent {
 
   private cartService = inject(CartService); // Inyectamos el servicio
-  private loginService = inject(LoginService);
+  private authService = inject(AuthService);
   private bounceSub?: Subscription;
 
   bounceKey = 0;
@@ -61,7 +61,7 @@ export class HeaderComponent {
   totalPrice = this.cartService.total; // Obtenemos el total calculado
 
   isAuthenticated = false;
-  showLoginModal = this.loginService.showLoginModal;
+  showLoginModal = this.authService.showLoginModal;
 
   ngOnInit() {
     this.bounceSub = this.cartService.cartBounce$.subscribe(() => {
@@ -108,6 +108,6 @@ export class HeaderComponent {
 
   openLoginModal() {
     console.log('Abriendo modal de login desde el header!');
-    this.loginService.openLoginModal();
+    this.authService.openLoginModal();
   }
 }

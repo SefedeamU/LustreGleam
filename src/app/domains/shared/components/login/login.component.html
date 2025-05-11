@@ -1,6 +1,11 @@
-<div (click)="closeLogin()" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
-  <div (click)="$event.stopPropagation()" class="dark:bg-gray-800 rounded-lg shadow-lg p-4 w-full max-w-sm relative z-90">
-
+<div class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40"
+  *ngIf="showModal"
+  @modalFade>
+  <div
+    (click)="$event.stopPropagation()"
+    class="dark:bg-gray-800 rounded-lg shadow-lg p-4 w-full max-w-sm relative z-90"
+    @formFade
+  >
     <div class="relative dark:bg-gray-600 rounded-lg shadow-md p-4 max-w-sm mx-auto">
       <!-- Botón para cerrar -->
       <button
@@ -20,6 +25,19 @@
         </svg>
       </button>
 
+      <!-- Mensaje de error -->
+
+      @if(errorMessage){
+        <div
+          class="mb-4 text-red-500 text-sm font-semibold text-center"
+          @fadeInOut
+        >
+          {{ errorMessage }}
+        </div>
+      }
+
+
+
       <!-- Formulario de inicio de sesión -->
       <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
         <div class="mb-5">
@@ -28,13 +46,13 @@
             type="email"
             id="email"
             name="email"
-            [(ngModel)]="user.email"
+            [(ngModel)]="user.mail"
             #emailInput="ngModel"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="name@LustreGleam.com"
             required
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-            />
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+          />
             <!-- Mensaje de error personalizado -->
             @if(emailInput.invalid && emailInput.touched){
               <div class="text-red-500 text-sm mt-1">
@@ -50,29 +68,40 @@
 
           <div class="mb-5">
             <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              [(ngModel)]="user.password"
-              #passwordInput="ngModel"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              required
+            <div class="relative">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                name="password"
+                [(ngModel)]="user.password"
+                #passwordInput="ngModel"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
               />
-              <!-- Mensaje de error personalizado -->
-              @if (passwordInput.invalid && passwordInput.touched) {
-                <div class="text-red-500 text-sm mt-1">
-                  La contraseña es obligatoria.
-                </div>
-              }
+              <button
+                type="button"
+                (click)="showPassword = !showPassword"
+                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 focus:outline-none"
+                tabindex="-1"
+                aria-label="Mostrar u ocultar contraseña"
+              >
+                <i [ngClass]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+              </button>
             </div>
+            <!-- Mensaje de error personalizado -->
+            @if (passwordInput.invalid && passwordInput.touched) {
+              <div class="text-red-500 text-sm mt-1">
+                La contraseña es obligatoria.
+              </div>
+            }
+          </div>
 
             <!-- Contenedor para el botón y el enlace -->
             <div class="flex items-center justify-between">
               <button
                 type="submit"
                 [disabled]="loginForm.invalid"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                 Submit
               </button>
@@ -85,6 +114,22 @@
                 <strong>¿No tienes cuenta? Registrarse</strong>
               </a>
             </div>
+
+            <!-----    Indicador de estado    ------>
+
+            <div class="flex justify-center items-center mt-4 h-6">
+              @if (displayStatus === 'loading') {
+                <i class="fa-solid fa-spinner fa-spin text-blue-500 text-2xl" @fadeInScaleOut></i>
+              }
+              @if (displayStatus === 'success') {
+                <i class="fa-solid fa-circle-check text-green-500 text-2xl" @fadeInScaleOut></i>
+              }
+              @if (displayStatus === 'error') {
+                <i class="fa-solid fa-circle-xmark text-red-500 text-2xl" @fadeInScaleOut></i>
+              }
+            </div>
+
+
           </form>
         </div>
       </div>

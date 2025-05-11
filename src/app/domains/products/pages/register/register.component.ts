@@ -1,30 +1,35 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { RegisterService } from '@shared/services/register.service';
-import { UserRegister } from '@shared/models/userRegister.model';
 import { FormsModule } from '@angular/forms';
 
 import { RouterLinkWithHref } from '@angular/router';
+import { RegisterDto } from '@shared/models/auth.model';
+import { AuthService } from '@shared/services/auth.service';
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, RouterLinkWithHref],
+  imports: [FormsModule, RouterLinkWithHref, CommonModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  private registerService = inject(RegisterService); // Inyectamos el servicio
+  private authService = inject(AuthService); // Inyectamos el servicio
 
-  user: UserRegister = {
-    email: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    company: ''
+  userConfirmPassword: string = '';
+  passwordMismatch = false;
+
+  user: RegisterDto = {
+    name: '',
+    mail: '',
+    telefono: '',
+    password: ''
   };
 
   onSubmit(): void {
-    console.log('Formulario enviado:', this.user);
-    this.registerService.register(this.user); // Llama al servicio para manejar el registro
+    if(this.user.password !== this.userConfirmPassword) {
+      console.log('Formulario enviado:', this.user);
+      this.authService.register(this.user);
+    }
+    this.passwordMismatch = false;
   }
+
 }
