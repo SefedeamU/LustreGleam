@@ -129,6 +129,8 @@ export class LoginComponent {
       ]);
 
       localStorage.setItem('token', resp.access_token);
+      localStorage.setItem('usuario_id', resp.id);
+      localStorage.setItem('user_rol', resp.rol);
       this.authService.setAuthenticated(true);
       this.setStatus('success', 2000);
 

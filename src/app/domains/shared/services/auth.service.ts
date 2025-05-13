@@ -15,6 +15,21 @@ export class AuthService {
   private http = inject(HttpClient);
   readonly url = environment.api_orquestador;
 
+    constructor() {
+    this.checkAuthOnLoad();
+  }
+
+  private checkAuthOnLoad() {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('user_id');
+    if (token && userId) {
+      this.isAuthenticated.set(true);
+    } else {
+      this.isAuthenticated.set(false);
+    }
+  }
+
+
   // Registro de usuario
   register(data: RegisterDto): Observable<any> {
     return this.http.post(`${this.url}/usuarios/register`, data);
@@ -35,8 +50,10 @@ export class AuthService {
 
   setAuthenticated(auth: boolean) {
     this.isAuthenticated.set(auth);
-      if (!auth) {
+    if (!auth) {
       localStorage.removeItem('token');
+      localStorage.removeItem('usuario_id');
+      localStorage.removeItem('user_rol');
     }
   }
 }

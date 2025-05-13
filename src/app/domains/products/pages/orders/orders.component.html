@@ -1,1 +1,112 @@
-<p>orders works!</p>
+<div class="mt-24">
+  <div *ngIf="loading" class="flex flex-col items-center py-10 text-center text-blue-600">
+    <i class="fa-solid fa-spinner fa-spin text-3xl mb-2"></i>
+    <p class="text-lg font-medium">Cargando tus compras...</p>
+  </div>
+
+  <div *ngIf="error" class="text-red-500 text-center py-10 text-lg font-semibold">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error && facturas.length === 0" class="text-center py-10 text-gray-500 dark:text-gray-400">
+    <i class="fa-solid fa-box-open text-4xl mb-2"></i>
+    <p class="text-lg">No tienes compras registradas.</p>
+  </div>
+
+  <div *ngIf="!loading && !error && facturas.length > 0" class="max-w-5xl mx-auto px-4">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">🧾✅ Tus Compras</h2>
+
+    <div *ngFor="let factura of facturas" class="mb-8 p-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-md">
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
+        <div>
+          <div class="text-lg font-semibold text-gray-800 dark:text-white">Compra del {{ factura.fecha | date: 'mediumDate' }}</div>
+          <div class="text-sm text-gray-500 dark:text-gray-400">
+            Cliente: <span class="font-semibold">{{ factura.usuario_info.nombre }} {{ factura.usuario_info.apellido }}</span>
+            <br />
+            📧 {{ factura.usuario_info.correo }}
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-sm text-gray-500 dark:text-gray-400">Total pagado:</div>
+          <div class="text-2xl font-bold text-green-600 dark:text-green-400">${{ factura.total | number: '1.2-2' }}</div>
+        </div>
+      </div>
+
+      <!-- Productos -->
+      <div class="overflow-x-auto mt-4">
+        <div *ngIf="!loading && !error && facturas.length > 0 && productsLoaded" class="max-w-5xl mx-auto px-4">
+          <table class="min-w-full text-sm border-t border-gray-200 dark:border-gray-600">
+            <thead>
+              <tr class="text-left bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+                <th class="p-3">Producto</th>
+                <th class="p-3">Cantidad</th>
+                <th class="p-3">Precio Unitario</th>
+                <th class="p-3">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let prod of factura.productos" class="border-b border-gray-200 dark:border-gray-700">
+                <td class="p-3 flex items-center gap-4">
+                  <img
+                    [src]="productDetails[prod.id_prod].imagen_url || 'https://via.placeholder.com/60'"
+                    [alt]="productDetails[prod.id_prod].nombre || 'Producto desconocido'"
+                    class="w-14 h-14 rounded object-cover border border-gray-300 dark:border-gray-600"
+                  />
+                  <div>
+                    <div class="font-medium text-gray-900 dark:text-white">
+                      {{ productDetails[prod.id_prod].nombre || 'Producto desconocido' }}
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                      ID: {{ prod.id_prod }}
+                    </div>
+                  </div>
+                </td>
+                <td class="p-3 text-gray-800 dark:text-gray-200">{{ prod.cantidad }}</td>
+                <td class="p-3 text-gray-800 dark:text-gray-200">
+                  ${{ productDetails[prod.id_prod].precio || prod.precio_unitario | number:'1.2-2' }}
+                </td>
+                <td class="p-3 text-green-600 dark:text-green-400 font-semibold">
+                  ${{ prod.subtotal | number:'1.2-2' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="flex justify-center mt-6 mb-16" *ngIf="!loading && !error && facturas.length > 0">
+    <ul class="flex items-center space-x-2">
+      <li>
+        <button
+          (click)="prevPage()"
+          [disabled]="currentPage === 0"
+          [ngClass]="{
+            'cursor-pointer': currentPage !== 0,
+            'cursor-not-allowed': currentPage === 0
+          }"
+          class="px-4 h-10 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-200 transition disabled:opacity-50">
+          <i class="fas fa-chevron-left"></i> Anterior
+        </button>
+      </li>
+      <li>
+        <span class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">
+          Página {{ currentPage + 1 }}
+        </span>
+      </li>
+      <li>
+        <!-- Solo muestra el botón si hay exactamente pageSize facturas -->
+        <button
+          (click)="nextPage()"
+          [disabled]="facturas.length < pageSize"
+          [ngClass]="{
+            'cursor-pointer': facturas.length === pageSize,
+            'cursor-not-allowed': facturas.length < pageSize
+          }"
+          class="px-4 h-10 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-200 transition disabled:opacity-50">
+          Siguiente <i class="fas fa-chevron-right"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>

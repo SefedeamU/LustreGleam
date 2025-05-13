@@ -1,0 +1,120 @@
+<!-- 💳 Checkout Mejorado -->
+<div class="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 mt-20">
+
+  <!-- 🛒 Productos del carrito o mensaje vacío en un rectángulo -->
+  <div class="lg:col-span-2">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 min-h-[300px] flex flex-col justify-center">
+      <ng-container *ngIf="cart().length > 0; else emptyCart">
+        <div
+          *ngFor="let item of cart(); trackBy: trackById"
+          @dropToCart
+          @removeFromCart
+          class="flex items-start gap-4 mb-6 border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0 last:mb-0"
+        >
+          <img
+            [src]="item.imagen_url || 'https://via.placeholder.com/100'"
+            [alt]="item.nombre"
+            class="w-24 h-24 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+          />
+
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ item.nombre }}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">📦 Stock: {{ item.stock }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">🏭 Proveedor: {{ item.proveedor }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">📍 Dirección: {{ item.direccion }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">📅 Fecha: {{ item.fecha_creacion | date:'mediumDate' }}</p>
+
+            <div class="flex flex-wrap gap-2 mt-2">
+              <span *ngFor="let cat of item.categorias" class="text-xs bg-blue-600 text-white px-2 py-1 rounded">
+                {{ cat.nombre }}
+              </span>
+            </div>
+
+            <!-- Controles -->
+            <div class="flex items-center gap-2 mt-4">
+              <button
+                (click)="decreaseQuantity(item.id_producto)"
+                class="cursor-pointer px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-black dark:text-white transition"
+              >
+                <i class="fas fa-minus"></i>
+              </button>
+              <span class="text-sm font-medium text-gray-800 dark:text-white">{{ item.quantity }}</span>
+              <button
+                (click)="increaseQuantity(item.id_producto)"
+                class="cursor-pointer px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-black dark:text-white transition"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+              <button
+                (click)="removeProduct(item)"
+                class="cursor-pointer ml-auto text-red-500 hover:text-red-700 transition"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="text-right text-green-600 dark:text-green-400 font-semibold text-lg ml-4 whitespace-nowrap">
+            ${{ item.precio * item.quantity | number:'1.2-2' }}
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Carrito vacío -->
+      <ng-template #emptyCart>
+        <div class="text-center py-12 text-gray-500 dark:text-gray-400">
+          <i class="fas fa-shopping-cart text-5xl mb-4"></i>
+          <div class="text-xl font-semibold">Tu carrito está vacío</div>
+          <div class="mt-2">Agrega productos para comenzar tu compra.</div>
+          <a routerLink="/" class="cursor-pointer mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+            Ir al catálogo
+          </a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- 💰 Panel de pago -->
+  <div
+    class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg border border-gray-300 dark:border-gray-700 sticky top-20 h-fit"
+    @fadeInOut
+  >
+    <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4">
+      Resumen de Compra
+    </h2>
+
+    <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+      <div class="flex justify-between">
+        <span>Productos</span>
+        <span>{{ cart().length }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Total Neto</span>
+        <span class="font-semibold text-green-600 dark:text-green-400">${{ total() | number:'1.2-2' }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Envío</span>
+        <span>Gratis 🚚</span>
+      </div>
+    </div>
+
+    <hr class="my-4 border-gray-300 dark:border-gray-600" />
+
+    <div class="flex justify-between text-lg font-bold text-gray-800 dark:text-white mb-4">
+      <span>Total a Pagar</span>
+      <span class="text-green-600 dark:text-green-400">${{ total() | number:'1.2-2' }}</span>
+    </div>
+
+    <button
+      (click)="onPay()"
+      [disabled]="cart().length === 0"
+      class="cursor-pointer w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition disabled:opacity-50"
+    >
+      Confirmar y Pagar
+    </button>
+
+    <p class="text-xs text-gray-400 mt-2 text-center">
+      Al pagar aceptas nuestros <a href="#" class="underline">términos y condiciones</a>.
+    </p>
+  </div>
+</div>

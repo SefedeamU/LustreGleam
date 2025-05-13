@@ -9,9 +9,22 @@
 
     <!-- Navegación -->
     <div class="cursor-pointer hidden md:flex gap-6 text-gray-700 dark:text-white font-medium">
-      <a routerLink="/" routerLinkActive="text-blue-600 font-semibold underline" [routerLinkActiveOptions]="{ exact: true }" >Catálogo</a>
-      <a routerLink="/about" routerLinkActive="text-blue-600 font-semibold underline">Acerca de</a>
-      <a routerLink="/contact" routerLinkActive="text-blue-600 font-semibold underline">Contacto</a>
+      <a
+        routerLink="/"
+        routerLinkActive="!bg-blue-600 !text-white !shadow-md !rounded"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="transition-colors duration-200 px-2 py-1 rounded hover:bg-blue-600 hover:text-white"
+      >Catálogo</a>
+      <a
+        routerLink="/about"
+        routerLinkActive="!bg-blue-600 !text-white !shadow-md !rounded"
+        class="transition-colors duration-200 px-2 py-1 rounded hover:bg-blue-600 hover:text-white"
+      >Acerca de</a>
+      <a
+        routerLink="/contact"
+        routerLinkActive="!bg-blue-600 !text-white !shadow-md !rounded"
+        class="transition-colors duration-200 px-2 py-1 rounded hover:bg-blue-600 hover:text-white"
+      >Contacto</a>
     </div>
 
     <!-- Acciones del Header -->
@@ -63,7 +76,7 @@
 
 <!-- 🛒 PANEL DE CARRITO SLIDE-IN -->
 <div
-  class="fixed top-0 right-0 z-50 w-[92%] sm:w-[420px] max-w-full h-full bg-white dark:bg-gray-900 shadow-2xl border-l border-gray-300 dark:border-gray-700 transition-transform duration-300 ease-in-out"
+  class="fixed top-0 right-0 z-50 w-[92%] sm:w-[420px] max-w-full h-full bg-white dark:bg-gray-900 shadow-2xl border-l border-gray-300 dark:border-gray-700 transition-transform duration-300 ease-in-out overflow-x-hidden"
   [ngClass]="hideCart() ? 'translate-x-full' : 'translate-x-0'">
 
   <!-- Header del carrito -->
@@ -77,7 +90,7 @@
   </div>
 
   <!-- Lista de productos -->
-  <div class="p-5 overflow-y-auto max-h-[calc(100vh-200px)]">
+  <div class="p-5 overflow-y-auto max-h-[calc(100vh-200px)] overflow-x-hidden">
     <ng-container *ngIf="cart().length > 0; else emptyCart">
       <div *ngFor="let product of cart(); trackBy: trackById" @dropToCart @removeFromCart
         class="mb-5 flex items-start gap-4 border-b pb-4">
@@ -118,13 +131,15 @@
   </div>
 
   <!-- Total -->
-  <div *ngIf="cart().length > 0" class="p-5 border-t border-gray-200 dark:border-gray-700">
+  <div *ngIf="cart().length > 0" @fadeInOut class="p-5 border-t border-gray-200 dark:border-gray-700">
     <div class="flex justify-between text-lg font-semibold text-gray-800 dark:text-white">
       <span>Total:</span>
       <span class="text-green-600 dark:text-green-400">{{ totalPrice() | currency }}</span>
     </div>
-    <button class="cursor-pointer mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg shadow-md transition">
-      Proceder al Pago
-    </button>
+      <button
+        (click)="procederAlPago()"
+        class="cursor-pointer mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg shadow-md transition">
+        Proceder al Pago
+      </button>
   </div>
 </div>

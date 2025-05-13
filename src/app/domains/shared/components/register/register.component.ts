@@ -88,9 +88,10 @@ export class RegisterComponent {
         this.authService.register(this.user).toPromise()
       ]);
       // Guarda el token y autentica al usuario
-      localStorage.setItem('token', resp.token);
       this.authService.setAuthenticated(true);
-
+      localStorage.setItem('token', resp.token);
+      localStorage.setItem('usuario_id', resp.id);
+      localStorage.setItem('user_rol', resp.rol);
       this.setStatus('success', 1200);
       setTimeout(() => {
         this.router.navigate(['/']);

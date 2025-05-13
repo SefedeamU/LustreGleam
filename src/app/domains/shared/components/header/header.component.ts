@@ -1,6 +1,6 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLinkWithHref ,RouterLinkActive } from '@angular/router';
+import { RouterLinkWithHref ,RouterLinkActive, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
@@ -73,6 +73,8 @@ export class HeaderComponent {
   showLoginModal = this.authService.showLoginModal;
   isAuthenticated = this.authService.isAuthenticated;
 
+  router = inject(Router);
+
   ngOnInit() {
     this.bounceSub = this.cartService.cartBounce$.subscribe(() => {
       this.bounceKey++;
@@ -81,6 +83,11 @@ export class HeaderComponent {
 
   ngOnDestroy() {
     this.bounceSub?.unsubscribe();
+  }
+
+  procederAlPago() {
+    this.cartHandler(); // Colapsa el carrito
+    this.router.navigate(['/payment']);
   }
 
   cartHandler() {
