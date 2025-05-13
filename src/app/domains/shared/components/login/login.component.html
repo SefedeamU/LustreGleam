@@ -105,14 +105,13 @@
                 >
                 Submit
               </button>
-              <a
-                routerLink="/register"
-                class="text-sm text-blue-200 hover:underline dark:text-blue-500"
-                (click)="closeLogin()"
-                (click)="hideCart()"
-                >
+              <button
+                type="button"
+                (click)="goToRegister()"
+                class="cursor-pointer text-sm text-blue-200 hover:underline dark:text-blue-500"
+>
                 <strong>¿No tienes cuenta? Registrarse</strong>
-              </a>
+              </button>
             </div>
 
             <!-----    Indicador de estado    ------>

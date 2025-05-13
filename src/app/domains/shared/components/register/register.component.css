@@ -1,0 +1,6 @@
+.fa-spin {
+  animation: fa-spin 2s infinite linear;
+}
+.text-glow-success {
+  text-shadow: 0 0 10px #10b981aa, 0 0 20px #10b98188;
+}

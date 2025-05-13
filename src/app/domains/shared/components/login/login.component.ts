@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLinkWithHref } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AuthService } from '@shared/services/auth.service';
 import { CartService } from '@shared/services/cart.service';
@@ -80,6 +80,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
   private authService = inject(AuthService);
   private cartService = inject(CartService);
+  private router = inject(Router);
 
   user: LoginDto = { mail: '', password: '' };
   errorMessage: string | null = null;
@@ -87,7 +88,7 @@ export class LoginComponent {
   displayStatus: typeof this.status = 'idle';
   showModal = true;
   showPassword = false;
-  
+
   private statusTimeout: any = null;
 
   private setStatus(newStatus: 'idle' | 'loading' | 'success' | 'error', timeoutMs?: number) {
@@ -119,7 +120,7 @@ export class LoginComponent {
     this.errorMessage = null;
     this.setStatus('loading');
 
-    const delay = new Promise<void>((resolve) => setTimeout(resolve, 1500));
+    const delay = new Promise<void>((resolve) => setTimeout(resolve, 1000));
 
     try {
       const [_, resp]: [void, any] = await Promise.all([
@@ -128,6 +129,7 @@ export class LoginComponent {
       ]);
 
       localStorage.setItem('token', resp.access_token);
+      this.authService.setAuthenticated(true);
       this.setStatus('success', 2000);
 
       setTimeout(() => {
@@ -135,7 +137,7 @@ export class LoginComponent {
       setTimeout(() => {
         this.authService.closeLoginModal();
       }, 300); // Espera la animación de salida
-    }, 1200); // Tiempo que muestras el check
+    }, 800); // Tiempo que muestras el check
   } catch (err: any) {
       await delay; // ⬅️ ¡espera también los 4 segundos en caso de error!
 
@@ -160,17 +162,24 @@ export class LoginComponent {
     }
   }
 
-
-
   closeLogin(): void {
     this.showModal = false;
     setTimeout(() => {
       this.authService.closeLoginModal();
-    }, 300); // 300ms debe coincidir con la duración de tu animación
+    }, 300);
   }
 
   hideCart() {
     this.cartService.hideCartVisivility();
     console.log('Cambio en el carrito detectado!');
   }
+
+  goToRegister(): void {
+  this.showModal = false;
+  setTimeout(() => {
+    this.authService.closeLoginModal();
+    this.router.navigate(['/register']);
+  }, 300);
+}
+
 }

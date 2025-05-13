@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLinkWithHref ,RouterLinkActive } from '@angular/router';
 
@@ -46,6 +46,15 @@ import { AuthService } from '@shared/services/auth.service';
         animate('200ms cubic-bezier(.68,-0.55,.27,1.55)', style({ transform: 'translateY(-12px)' })),
         animate('120ms', style({ transform: 'translateY(0)' }))
       ])
+    ]),
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(10px)' })),
+      ]),
     ])
   ]
 })
@@ -55,13 +64,14 @@ export class HeaderComponent {
   private authService = inject(AuthService);
   private bounceSub?: Subscription;
 
+  isDropdownOpen = false;
   bounceKey = 0;
   cart = this.cartService.cart; // Obtenemos el carrito del servicio
   hideCart = this.cartService.hideCart; // Obtenemos el estado de visibilidad del carrito
   totalPrice = this.cartService.total; // Obtenemos el total calculado
 
-  isAuthenticated = false;
   showLoginModal = this.authService.showLoginModal;
+  isAuthenticated = this.authService.isAuthenticated;
 
   ngOnInit() {
     this.bounceSub = this.cartService.cartBounce$.subscribe(() => {
@@ -101,13 +111,31 @@ export class HeaderComponent {
     this.cartService.decreaseQuantity(productId);
   }
 
-
-  checkAuthentication() {
-    this.isAuthenticated = false;
-  }
-
   openLoginModal() {
     console.log('Abriendo modal de login desde el header!');
     this.authService.openLoginModal();
+  }
+
+  logout() {
+    this.authService.setAuthenticated(false);
+    console.log('Sesión cerrada');
+    this.isDropdownOpen = false;
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+    closeDropdown() {
+    this.isDropdownOpen = false;
+  }
+
+  // Cierra al hacer clic fuera
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.closeDropdown();
+    }
   }
 }

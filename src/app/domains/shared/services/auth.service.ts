@@ -10,8 +10,9 @@ import { RegisterDto, LoginDto } from '@shared/models/auth.model';
 })
 export class AuthService {
   showLoginModal = signal(false);
-  private http = inject(HttpClient);
+  isAuthenticated = signal(false);
 
+  private http = inject(HttpClient);
   readonly url = environment.api_orquestador;
 
   // Registro de usuario
@@ -30,5 +31,12 @@ export class AuthService {
 
   closeLoginModal() {
     this.showLoginModal.set(false);
+  }
+
+  setAuthenticated(auth: boolean) {
+    this.isAuthenticated.set(auth);
+      if (!auth) {
+      localStorage.removeItem('token');
+    }
   }
 }

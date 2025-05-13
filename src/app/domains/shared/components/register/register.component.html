@@ -1,0 +1,132 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-md">
+      <div class="relative">
+        <!-- Título de la página -->
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Registro</h1>
+
+        <!-- Formulario de registro -->
+        <form #registerForm="ngForm" (ngSubmit)="onSubmit()">
+          <div class="grid md:grid-cols-2 md:gap-6">
+            <div class="mb-5">
+              <label for="firstName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                [(ngModel)]="firstName"
+                #firstNameInput="ngModel"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+              />
+            </div>
+            <div class="mb-5">
+              <label for="lastName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                [(ngModel)]="lastName"
+                #lastNameInput="ngModel"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="mb-5">
+            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              [(ngModel)]="user.telefono"
+              #phoneInput="ngModel"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required
+              pattern="^[0-9]{7,15}$"
+              placeholder="Ej: 1123456789"
+            />
+            <div *ngIf="phoneInput.invalid && phoneInput.touched" class="text-red-500 text-sm mt-1">
+              Ingresa un número de teléfono válido.
+            </div>
+          </div>
+
+            <div class="mb-5">
+              <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                [(ngModel)]="user.mail"
+                #emailInput="ngModel"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="name@flowbite.com"
+                required
+              />
+            </div>
+
+            <div class="mb-5">
+              <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                [(ngModel)]="user.password"
+                #passwordInput="ngModel"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+              />
+            </div>
+
+            <div class="mb-5">
+              <label for="confirmPassword" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirmar contraseña</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                [(ngModel)]="userConfirmPassword"
+                #confirmPasswordInput="ngModel"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+              />
+              <div *ngIf="passwordMismatch && confirmPasswordInput.touched" class="text-red-500 text-sm mt-1">
+                Las contraseñas no coinciden.
+              </div>
+            </div>
+
+              <div class="flex items-center justify-between">
+                <button
+                    type="submit"
+                    [disabled]="registerForm.invalid"
+                    class="cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                    Register
+                </button>
+                <a
+                  routerLink="/"
+                  class="text-sm text-blue-200 hover:underline dark:text-blue-500"
+                >
+                    <strong>Volver al inicio</strong>
+                </a>
+              </div>
+
+              <!-- Indicador de estado y mensajes de error -->
+              <div class="flex justify-center items-center mt-4 h-6">
+                <ng-container *ngIf="displayStatus === 'loading'">
+                  <i class="fa-solid fa-spinner fa-spin text-blue-500 text-2xl" @fadeInScaleOut></i>
+                </ng-container>
+                <ng-container *ngIf="displayStatus === 'success'">
+                  <i class="fa-solid fa-circle-check text-green-500 text-2xl" @fadeInScaleOut></i>
+                </ng-container>
+                <ng-container *ngIf="displayStatus === 'error'">
+                  <i class="fa-solid fa-circle-xmark text-red-500 text-2xl" @fadeInScaleOut></i>
+                </ng-container>
+              </div>
+              <div *ngIf="errorMessage" class="mb-4 text-red-500 text-sm font-semibold text-center" @fadeInOut>
+                {{ errorMessage }}
+              </div>
+            </form>
+        </div>
+    </div>
+</div>

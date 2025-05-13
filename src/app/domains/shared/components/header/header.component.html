@@ -32,23 +32,31 @@
       </button>
 
       <!-- 🔐 Botón Login -->
-      @if(!isAuthenticated){
-        <button (click)="openLoginModal()" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-          Iniciar Sesión
-        </button>
-      }
-      @if(isAuthenticated){
-        <button class="cursor-pointer bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-full hover:bg-gray-200">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 6a3.75 3.75 0 1 1-7.5 0M4.5 20.118a7.5 7.5 0 0 1 15 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.5-1.632" />
-          </svg>
-        </button>
-      }
-
-      @if(showLoginModal()){
-        <app-login></app-login>
-      }
+        @if(!isAuthenticated()){
+          <button (click)="openLoginModal()" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+            Iniciar Sesión
+          </button>
+        }
+        @if(isAuthenticated()){
+          <!-- 🔐 Usuario autenticado -->
+          <div class="relative" (clickOutside)="closeDropdown()">
+            <button (click)="toggleDropdown()" class="cursor-pointer bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-full hover:bg-gray-200">
+              <i class="fa-solid fa-user-circle text-2xl"></i>
+            </button>
+            @if(isDropdownOpen){
+              <div
+                @fadeInOut
+                class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                <a routerLink="/profile" class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-white">Mi Cuenta</a>
+                <a routerLink="/orders" class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-white">Mis Pedidos</a>
+                <button (click)="logout()" routerLink="/" class="cursor-pointer w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 dark:text-red-400">Cerrar Sesión</button>
+              </div>
+            }
+          </div>
+        }
+        @if(showLoginModal()){
+          <app-login></app-login>
+        }
     </div>
   </div>
 </nav>
