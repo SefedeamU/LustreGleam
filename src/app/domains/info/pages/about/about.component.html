@@ -1,10 +1,30 @@
-<div class="px-10 pt-24">
-  <h1 class="text-lg font-bold">About</h1>
-  <p class="text-xs"><span Highlight >Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span> Natus enim nam, eaque quas doloribus iste velit porro sapiente. Ducimus sit at laborum voluptate optio dolorum, quasi velit facere unde animi?</p>
-  <p class="text-xs">Numero de clientes @if (duration() > 0) {
-    <app-counter [duration]="duration()" [message]="message()"/>
-  }</p>
-  <div>
-    <app-wave-audio url="audio/audio.mp3"/>
+<div class="mt-24">
+  <section class="developers-wrapper">
+    <h1 class="section-title">Conoce a Nuestro Equipo 💼</h1>
+  </section>
+  <div class="illustration-wrapper">
+    <img src="img/Gian y Fede.jpg" alt="Nuestro equipo" />
+    <p>Un equipo comprometido con la excelencia 🚀</p>
   </div>
+  <section class="developers-wrapper">
+    <div
+      class="dev-card"
+      *ngFor="let dev of developers; let i = index"
+      [class.reverse]="i % 2 === 1"
+    >
+      <div class="dev-photo">
+        <img [src]="dev.image" [alt]="dev.name" />
+      </div>
+      <div class="dev-info">
+        <h2>{{ dev.name }}</h2>
+        <h3>{{ dev.role }}</h3>
+        <p>{{ dev.description }}</p>
+      </div>
+    </div>
+
+    <div class="footer-decor">
+      <i class="fa-solid fa-code-branch"></i>
+      <p>Hecho con ❤️ por el mejor equipo de desarrollo</p>
+    </div>
+  </section>
 </div>

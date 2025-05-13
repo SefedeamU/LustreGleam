@@ -86,6 +86,10 @@ export class HeaderComponent {
   }
 
   procederAlPago() {
+    if (!this.isAuthenticated()) {
+      this.openLoginModal();
+      return;
+    }
     this.cartHandler(); // Colapsa el carrito
     this.router.navigate(['/payment']);
   }

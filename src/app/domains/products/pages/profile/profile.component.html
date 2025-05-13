@@ -1,0 +1,47 @@
+<div class="mt-24">
+  <div class="profile-container" *ngIf="!loading && user; else loadingOrError">
+    <h2><i class="fa-solid fa-user-circle"></i> Bienvenido, {{ user.name }} 👋</h2>
+
+    <div class="profile-card">
+      <div class="profile-item">
+        <i class="fa-solid fa-id-card"></i>
+        <strong>Nombre:</strong> {{ user.name }}
+      </div>
+      <div class="profile-item">
+        <i class="fa-solid fa-envelope"></i>
+        <strong>Email:</strong> {{ user.mail }}
+      </div>
+      <div class="profile-item">
+        <i class="fa-solid fa-phone"></i>
+        <strong>Teléfono:</strong> {{ user.telefono }}
+      </div>
+      <div class="profile-item">
+        <i class="fa-solid fa-location-dot"></i>
+        <strong>Dirección:</strong> {{ user.usrdir || 'No especificada 🏚️' }}
+      </div>
+      <div class="profile-item">
+        <i class="fa-solid fa-user-tag"></i>
+        <strong>Rol:</strong> {{ user.rol }}
+      </div>
+      <div class="profile-item">
+        <i class="fa-solid fa-calendar-check"></i>
+        <strong>Miembro desde:</strong> {{ user.fecha_creacion | date }}
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="edit-btn">
+        <i class="fa-solid fa-pen-to-square"></i> Editar Perfil
+      </button>
+    </div>
+  </div>
+
+  <ng-template #loadingOrError>
+    <div *ngIf="loading" class="loading-msg">
+      <i class="fa-solid fa-spinner fa-spin"></i> Cargando perfil...
+    </div>
+    <div *ngIf="!loading && errorMessage" class="error">
+      <i class="fa-solid fa-triangle-exclamation"></i> {{ errorMessage }}
+    </div>
+  </ng-template>
+</div>
